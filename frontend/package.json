@@ -1,6 +1,9 @@
 {
   "name": "ssi-studio",
   "version": "0.1.0",
+  "description": "",
+  "author": "foxbike (https://github.com/foxbike)",
+  "license": "LiLiQ-R",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.json",

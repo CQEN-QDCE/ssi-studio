@@ -2,9 +2,9 @@
   "name": "backend",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "foxbike (https://github.com/foxbike)",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "LiLiQ-R",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

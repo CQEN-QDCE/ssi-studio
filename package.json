@@ -6,8 +6,8 @@
       "install:backend": "cd backend && npm ci",
       "install:frontend": "cd frontend && npm ci",
       "install:all": "run-s install:backend install:frontend",
-      "build:backend": "cd bifold/core && npm run prepack",
-      "build:frontend": "cd app && npm run prepack --if-present",
+      "build:backend": "cd backend && nest build",
+      "build:frontend": "cd frontend && ng build",
       "build:all": "run-s build:backend build:frontend",
       "prepare": "run-s install:all build:all"
     },
@@ -15,8 +15,8 @@
       "type": "git",
       "url": "git+https://github.com/CQEN-QDCE/ssi-studio.git"
     },
-    "author": "",
-    "license": "Apache-2.0",
+    "author": "foxbike (https://github.com/foxbike)",
+    "license": "LiLiQ-R",
     "bugs": {
       "url": "https://github.com/CQEN-QDCE/ssi-studio/issues"
     },
