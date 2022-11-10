@@ -1,0 +1,16 @@
+<p-button icon="fa fa-check" (click)="createInvitation()" label="Create Invitation"></p-button>
+<qrcode [qrdata]="invitationQrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+<p-button icon="fa fa-check" (click)="verifyConnection()" label="Verify Connection"></p-button>
+<p-button icon="fa fa-check" (click)="createSchema()" label="Create Schema"></p-button>
+<p-button icon="fa fa-check" (click)="createCredentialDefinition()" label="Create Credential Definition"></p-button>
+<p-button icon="fa fa-check" (click)="searchConnection()" label="Search Connection"></p-button>
+<p-button icon="fa fa-check" (click)="searchOcaSchema()" label="Search OCA Schema"></p-button>
+<anoncred-schema-editor></anoncred-schema-editor>
+<anoncred-credential-definition-editor></anoncred-credential-definition-editor>
+<credential-issuer></credential-issuer>
+<oca-language-selector (supportedLanguagesChange)="changeSupportedLanguages($event)" (currentLanguageChange)="changeCurrentLanguage($event)"></oca-language-selector>
+<oca-menubar (onAddCategory)="addCategory($event)"></oca-menubar>
+<oca-control-toolbox></oca-control-toolbox>
+<oca-form-builder #fb [language]="currentLanguage"></oca-form-builder> 
+<organizations-view></organizations-view>
+<organization></organization>

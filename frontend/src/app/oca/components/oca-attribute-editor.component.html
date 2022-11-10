@@ -1,0 +1,111 @@
+<div class="grid">
+    <div class="col-6">
+        <label for="name">Attribute Name*</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input id="category-name" type="text" pInputText [(ngModel)]="attribute.name" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+        </div>
+    </div>
+    <div class="col-4">
+        <label for="name">Attribute type</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input id="category-name" type="text" pInputText [(ngModel)]="attribute.type" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel" disabled>
+        </div>
+    </div>
+    <div class="col-2">
+        <label for="name">Encoding</label>
+        <p-dropdown id="oca-encoding" 
+                    appendTo="body" 
+                    placeholder="Select encoding..."
+                    [options]="encodings" 
+                    [(ngModel)]="attribute.encoding" 
+                    [style]="{'width':'100%'}">
+        </p-dropdown>  
+    </div>
+    <div class="col-6">
+        <label for="name">Control Label*</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input id="category-name" type="text" pInputText [(ngModel)]="attribute.controlLabel" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+        </div>
+    </div>
+    <div class="col-6">
+        <label for="name">Default Value</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input id="category-name" type="text" pInputText [(ngModel)]="attribute.defaultValue" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+        </div>
+    </div>
+    <div class="col-4">
+        <p-checkbox [binary]="true" [(ngModel)]="attribute.required" label="Required"></p-checkbox>
+    </div>
+    <div class="col-4">
+        <p-checkbox [binary]="true" [(ngModel)]="attribute.readOnly" label="Read Only"></p-checkbox>
+    </div>
+    <div class="col-4">
+        <p-checkbox [binary]="true" [(ngModel)]="attribute.pii" label="Pii"></p-checkbox>
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Date Picker'" class="col-12">
+        <label for="name">Date Format</label>
+        <p-dropdown id="oca-date-format" 
+                    appendTo="body" 
+                    placeholder="Select format..."
+                    [options]="dateFormats" 
+                    [(ngModel)]="attribute.dateFormat" 
+                    [style]="{'width':'100%'}">
+        </p-dropdown>  
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Time Picker'" class="col-12">
+        <label for="name">Time Format</label>
+        <p-dropdown id="oca-time-format" 
+                    appendTo="body" 
+                    placeholder="Select format..."
+                    [options]="timeFormats" 
+                    [(ngModel)]="attribute.timeFormat" 
+                    [style]="{'width':'100%'}">
+        </p-dropdown>  
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Select Option'" class="col-12">
+        <p-checkbox [binary]="true" [(ngModel)]="attribute.multiSelect" label="Multiple Select"></p-checkbox>
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Checkbox'" class="col-12">
+        <p-checkbox [binary]="true" [(ngModel)]="attribute.autoCheck" label="Auto Check"></p-checkbox>
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Select Option'" class="col-12">
+        <p-table [value]="attribute.options" dataKey="value" editMode="row">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Options</th>
+                    <th style="width:2rem"><button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2" (click)="addOption()"></button></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-option let-ri="rowIndex">
+                <tr>
+                    <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="option.value">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            {{option.value}}
+                        </ng-template>
+                    </p-cellEditor>
+                    </td>
+                    <td><button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="deleteOption(ri)"></button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Number Input'" class="col-6">
+        <p-checkbox [binary]="true" [(ngModel)]="attribute.pii" label="Integer Only"></p-checkbox>
+    </div>
+    <div *ngIf="attribute.type.toString() === 'Number Input'" class="col-6">
+        <label for="name">Decimal Places</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input id="category-name" type="text" pInputText [(ngModel)]="attribute.decimalPlaces" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+        </div>
+    </div>
+    <div class="col-12">
+        <label for="name">Information</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input id="category-name" type="text" pInputText [(ngModel)]="attribute.information" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+        </div>
+    </div>
+</div>

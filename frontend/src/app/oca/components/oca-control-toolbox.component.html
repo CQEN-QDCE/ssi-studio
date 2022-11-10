@@ -1,0 +1,12 @@
+<p-table [value]="availableAttributes">
+    <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+            <h5 class="m-0">Toolbox</h5>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="body" let-attribute>
+        <tr pDraggable="controls" (onDragStart)="dragStart($event, attribute)">
+            <td class= "grabbable"><i [class]="attribute.icon" style="margin-right:10px;"></i>{{attribute.type}}</td> 
+        </tr> 
+    </ng-template>
+</p-table>

@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  database:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: ssi_lab
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  api:
+    container_name: nestjs_api
+    image: nestjs-api:1.0.0
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - database
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DATABASE=ssi_lab
+      - PORT=3000
+      - MODE=DEV
+      - RUN_MIGRATIONS=false
+  frontend:
+    container_name: angular
+    image: angular:1.0.0
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 4201:80
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
+    depends_on:
+      - api
+volumes:
+  postgres_data:

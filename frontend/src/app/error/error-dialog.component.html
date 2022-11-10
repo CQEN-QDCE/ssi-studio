@@ -1,0 +1,10 @@
+<div *ngIf="outputNotification">
+    <p-dialog header="{{'ErrorTitle' | translate }}" [(visible)]="display" [responsive]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '50vw', 'max-width': '600px'}">
+        <div class="colrid ui-grid-responsive ui-fluid" style="overflow-y: auto; max-height: calc(100vh - 250px);white-space: pre-line">
+                {{ message }}
+        </div>
+         <p-footer>
+            <button type="text" (click)="close()" pButton icon="fa fa-close" label="{{'CloseLabel' | translate }}"></button>
+        </p-footer>
+    </p-dialog>
+</div>

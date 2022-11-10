@@ -1,0 +1,92 @@
+<div ngForm #schemaForm="ngForm">
+    <div class="grid">
+        <div class="col-12">   
+            <p-table [value]="schemaIds">
+                <ng-template pTemplate="caption">
+                    <div class="flex align-items-center justify-content-between">
+                        <h5 class="m-0">Manage Schemas</h5>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="did">DID <p-sortIcon field="did"></p-sortIcon></th>
+                        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="version">Version</th>
+                        <th style="width:2rem"><button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2" (click)="addSchema()"></button></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-schemaId>
+                    <tr>
+                        <td>{{schemaId.toString()}}</td>
+                        <td>{{schemaId.did}}</td>
+                        <td>{{schemaId.name}}</td>
+                        <td>{{schemaId.version}}</td>
+                        <td><button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSchema(schemaId)"></button></td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        In total there are {{schemaIds ? schemaIds.length : 0 }} schemas.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<p-dialog header="New Schema Version" [(visible)]="editSchemaDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
+    <div *ngIf="editSchemaDialogVisible">
+        <div class="grid">
+            <div *ngIf="curentSchema.id !== ''" class="col-12">
+                <label for="name">Id*</label>
+                <div class="ui-inputgroup">
+                  <input id="id" type="text" pInputText [(ngModel)]="curentSchema.id" ngModel #id="ngModel" [style]="{'width':'100%'}" disabled>
+                </div>
+            </div>
+            <div class="col-10">
+                <label for="name">Name*</label>
+                <div class="ui-inputgroup">
+                  <input id="name" type="text" pInputText [(ngModel)]="curentSchema.name" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel" [disabled]="curentSchema.id !==''">
+                </div>
+            </div>
+            <div class="col-2">
+                <label for="name">Version*</label>
+                <div class="ui-inputgroup">
+                  <input id="version" type="text" pInputText [(ngModel)]="curentSchema.version" maxlength="10" [style]="{'width':'100%'}" ngModel #version="ngModel">
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="name">Attributes*</label>
+                <p-table #dt [value]="schemaAttributes" [rows]="10" [paginator]="true" editMode="row" dataKey="id">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                            <th style="width:7rem"><button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2" (click)="addAttribute()"></button></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-attribute let-editing="editing" let-ri="rowIndex">
+                        <tr [pEditableRow]="attribute">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="attribute.name" [style]="{'width':'100%'}">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{attribute.name}}
+                                </ng-template>
+                            </p-cellEditor>
+                            <td>
+                                <button *ngIf="!editing" pButton pRipple pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAttribute(ri, attribute)"></button>
+                                <button *ngIf="editing" pButton pRipple pSaveEditableRow icon="pi pi-check" (click)="saveAttribute(ri, attribute)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                <button *ngIf="editing" pButton pRipple pCancelEditableRow icon="pi pi-times" (click)="cancelAttribute(ri, attribute)" class="p-button-rounded p-button-text p-button-danger"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-close" (click)="cancelEditSchema()" label="Cancel"></button>
+        <button type="button" pButton icon="fa fa-check" (click)="acceptEditSchema()" label="Add"></button>
+    </p-footer>
+</p-dialog>

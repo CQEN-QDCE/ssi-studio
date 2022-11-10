@@ -1,0 +1,62 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+	    {
+	      "label": "debugproj",
+	      "type": "npm",
+	      "script": "start",
+	      "isBackground": true,
+	      "presentation": {
+	        "focus": true,
+	        "panel": "dedicated"
+	      },
+	      "group": {
+	        "kind": "build",
+	        "isDefy ault": true
+	      },
+	    "problemMatcher": {
+	        "owner": "typescript",
+	        "source": "ts",
+	        "applyTo": "closedDocuments",
+	        "fileLocation": [
+	          "relative",
+	          "${cwd}"
+	        ],
+	        "pattern": "$tsc",
+	        "background": {
+	          "activeOnStart": true,
+	          "beginsPattern": {
+	            "regexp": "(.*?)"
+	          },
+	          "endsPattern": {
+	            "regexp": "Compiled |Failed to compile."
+	          }
+	        }
+	      }
+	    },
+        {
+            "label": "Stopdebugproj",
+            "type": "process",
+            "command":[
+               "${command:workbench.action.tasks.terminate}"
+            ],
+         },
+         //Task to end application
+         //Be aware that this task will end ALL the tasks running in VS Code
+         {
+             "label": "end all",
+             "command": "echo ${input:terminate}",
+             "type": "shell",
+             "problemMatcher": []
+         }
+	],
+    "inputs": [
+        //Input to pass the argument terminateAll to workbench.terminate
+        {
+            "id": "terminate",
+            "type": "command",
+            "command": "workbench.action.tasks.terminate",
+            "args": "terminateAll"
+        }
+    ]
+}

@@ -1,0 +1,45 @@
+<div class="workspace-title">{{'WorkspacesTitle' | translate }}</div>
+<p-button icon="fa fa-plus" (click)="addOrganization()" label="{{'AddLabel' | translate }}"></p-button>
+<p-dataView [value]="organizations">
+    <ng-template let-organization let-index="rowIndex" pTemplate="listItem">
+        <div class="workspace-list-item" (click)="select(index)">
+            <div style="width: 30%; margin: 10px">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 297" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 297 297">
+                <g>
+                  <path d="m190.411,101.693c1.065,0.427 2.163,0.628 3.244,0.628 3.468,0 6.751-2.079 8.118-5.496l33.933-84.834c1.793-4.483-0.387-9.569-4.868-11.361-4.485-1.797-9.569,0.387-11.361,4.868l-33.933,84.834c-1.794,4.482 0.386,9.568 4.867,11.361z"/>
+                  <path d="m271.294,135.738h-47.97c3.384-1.206 5.81-4.429 5.81-8.226v-50.9c0-4.827-3.913-8.74-8.74-8.74s-8.74,3.913-8.74,8.74v42.16h-25.194c-4.827,0-8.74,3.913-8.74,8.74 0,3.798 2.427,7.02 5.81,8.226h-31.003c-4.827,0-8.74,3.913-8.74,8.74v143.782c0,4.827 3.913,8.74 8.74,8.74 4.827,0 8.74-3.913 8.74-8.74v-101.108h101.286v101.108c0,4.827 3.913,8.74 8.74,8.74s8.74-3.913 8.74-8.74v-143.782c0.001-4.827-3.912-8.74-8.739-8.74zm-8.741,33.933h-101.286v-16.453h101.286v16.453z"/>
+                  <path d="m51.552,94.426c19.07,0 34.585-15.515 34.585-34.585s-15.515-34.586-34.585-34.586-34.586,15.516-34.586,34.586 15.516,34.585 34.586,34.585zm0-52.171c9.696,0 17.585,7.889 17.585,17.586 0,9.696-7.889,17.585-17.585,17.585-9.697,0-17.586-7.889-17.586-17.585 0-9.697 7.889-17.586 17.586-17.586z"/>
+                  <path d="m110.422,173.424h-27.546v-35.099c0-17.272-14.052-31.325-31.324-31.325s-31.325,14.053-31.325,31.325v54.6c0,16.584 13.491,30.075 30.075,30.075h35.741v65.326c0,4.694 3.806,8.5 8.5,8.5h33c4.694,0 8.5-3.806 8.5-8.5v-89.281c0-14.128-11.493-25.621-25.621-25.621zm8.621,106.402h-16v-65.326c0-4.694-3.806-8.5-8.5-8.5h-44.241c-7.21,0-13.075-5.865-13.075-13.075v-54.6c0-7.899 6.426-14.325 14.325-14.325 7.898,0 14.324,6.426 14.324,14.325v43.599c0,4.694 3.806,8.5 8.5,8.5h36.046c4.754,0 8.621,3.867 8.621,8.621v80.781z"/>
+                </g>
+              </svg>
+            </div>
+            <div class="workspace-name">{{organization.name}}</div>
+            <div class="workspace-description">{{organization.description}}</div>
+            <button pButton pRipple type="button" icon="fa fa-arrow-right" class="p-button-rounded p-button-text" (click)="select(index)"></button>
+            <button pButton pRipple type="button" icon="fa fa-edit" class="p-button-rounded p-button-text" (click)="$event.preventDefault(); $event.stopPropagation(); edit(index)"></button>
+            <button pButton pRipple type="button" icon="fa fa-trash" class="p-button-rounded p-button-text" (click)="$event.preventDefault(); $event.stopPropagation(); delete(index)"></button>
+        </div>
+    </ng-template>
+</p-dataView>
+<p-dialog header="{{'WorkspaceTitle' | translate }}" [(visible)]="organizationDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
+    <div *ngIf="organizationDialogVisible">
+        <div class="grid">
+            <div class="col-12">
+                <label for="name">{{'NameLabel' | translate }}</label>
+                <div class="ui-inputgroup">
+                  <input id="id" type="text" pInputText [(ngModel)]="organization.name" ngModel #id="ngModel" [style]="{'width':'100%'}">
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="name">{{'DescriptionLabel' | translate }}</label>
+                <div class="ui-inputgroup">
+                  <input id="id" type="text" pInputText [(ngModel)]="organization.description" ngModel #id="ngModel" [style]="{'width':'100%'}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-close" (click)="cancel()" label="{{'CancelLabel' | translate }}"></button>
+        <button type="button" pButton icon="fa fa-check" (click)="accept()" [label]="acceptLabel"></button>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,8 @@
+<div class="toolbox">
+    <oca-control-toolbox></oca-control-toolbox>
+    <oca-language-selector #ocaLanguageSelector (supportedLanguagesChange)="changeSupportedLanguages($event)" (currentLanguageChange)="changeCurrentLanguage($event)" [style]="{'margin': '10px'}"></oca-language-selector>
+</div>
+<div class="form">
+    <oca-menubar (onAddCategory)="addCategory($event)"></oca-menubar>
+    <oca-form-builder #ocaFormBuilder [form]="ocaForm" [language]="currentLanguage"></oca-form-builder>
+</div>

@@ -1,0 +1,83 @@
+<form #anonCredForm="ngForm">
+    <div class="grid">
+        <div *ngIf="curentSchema.id !== ''" class="col-12">
+            <label for="anoncred-schema-id">{{'IdLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+                <input name="anoncred-schema-id" type="text" pInputText [(ngModel)]="curentSchema.id" ngModel #id="ngModel" [style]="{'width':'100%'}" disabled>
+            </div>
+        </div>
+        <div class="col-10">
+            <label for="anoncred-schema-name">{{'NameLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+                <input name="anoncred-schema-name" type="text" pInputText [(ngModel)]="curentSchema.name" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel" [disabled]="curentSchema.id !=='' || newVersion" autofocus required>
+                <div *ngIf="name.invalid && (name.dirty)" class="alert">
+                    <div *ngIf="name.errors?.['required']"> {{'IsRequiredValidation' | translate }}</div>
+                    <div *ngIf="name.errors?.['maxlength']">Name must be at most 60 characters long.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2">
+            <label for="anoncred-schema-version">{{'VersionLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+                <input name="anoncred-schema-version" type="text" pInputText [placeholder]="versionPlaceHolder" [(ngModel)]="curentSchema.version" (ngModelChange)="changeVersion($event)" maxlength="10" [style]="{'width':'100%'}" ngModel #version="ngModel" required>
+                <div *ngIf="version.invalid && (version.dirty)" class="alert">
+                    <div *ngIf="version.errors?.['required']"> {{'IsRequiredValidation' | translate }}</div>
+                </div>
+           </div>
+        </div>
+        <div *ngIf="credentialDefinition" class="col-7">
+            <label for="name">{{'TagLabel' | translate }}</label>
+            <div class="ui-inputgroup">
+                <input name="anoncred-schema-tag" type="text" pInputText [(ngModel)]="credentialDefinition.tag" (ngModelChange)="changeTag($event)" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+            </div>
+        </div>
+        <div *ngIf="credentialDefinition" class="col-2">
+            <div for="name" style="margin-bottom: 5px">{{'RevocableLabel' | translate }}</div>
+            <p-checkbox name="anoncred-schema-revocable" [binary]="true" [(ngModel)]="revocable" label="" (ngModelChange)="changeRevocable($event)"></p-checkbox>
+        </div>
+        <div *ngIf="credentialDefinition" class="col-3">
+            <label for="name">{{'RegistrySizeLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+              <input name="anoncred-schema-registry-size" type="number" min="4" max="32768" pInputText [(ngModel)]="revocationRegistrySize" (ngModelChange)="changeRegistrySize($event)" ngModel #registrySize="ngModel" [style]="{'width':'100%'}" [disabled]="!revocable" required>
+              <div *ngIf="registrySize.invalid && (registrySize.dirty)" class="alert">
+                <div *ngIf="registrySize.errors?.['required']"> {{'IsRequiredValidation' | translate }}</div>
+                <div *ngIf="registrySize.errors?.['min']"> {{'RegistrySizeMin' | translate }}</div>
+                <div *ngIf="registrySize.errors?.['max']"> {{'RegistrySizeMax' | translate }}</div>
+            </div>
+        </div>
+        </div>
+        <div class="col-12">
+            <div for="name" style="margin-bottom: 5px">{{'IssuerAgentLabel' | translate }}*</div>
+            <p-dropdown id="anoncred-schema-agent" 
+                        name="anoncred-schema-agent" 
+                        [options]="agentTemplates" 
+                        [(ngModel)]="currentAgentTemplate" 
+                        placeholder="Select..." 
+                        optionLabel="name"
+                        dataKey="id"
+                        ngModel #anoncredSchemaAgent="ngModel" [required]="true"
+                        appendTo="body" 
+                        [style]="{'width':'100%'}"
+                        (onChange)="changeAgentTemplate($event.value)" 
+                        [disabled]="agentTemplates.length == -1">
+            </p-dropdown>
+            <div *ngIf="anoncredSchemaAgent.invalid && (anoncredSchemaAgent.dirty)" class="alert">
+                <div *ngIf="anoncredSchemaAgent.errors?.['required']"> {{'IsRequiredValidation' | translate }}</div>
+            </div>
+        </div>
+        <div class="col-12">
+            <label for="name">{{'AttributesLabel' | translate }}*</label>
+            <div class="grid">
+                <div *ngFor="let attribute of schemaAttributes; let i = index" class="col-12">
+                    <div style="position: relative">
+                        <input pInputText [name]="'input' + i" [id]="'input' + i" (keyup.enter)="focusNext(i)" type="text" [(ngModel)]="attribute.name" [style]="{'width':'calc(100% - 50px)'}" (ngModelChange)="addAttribute2(i)" (change)="changeAttribute()" [required]="i === 0 || (schemaAttributes.length > 1 && i < schemaAttributes.length - 1)" ngModel #anoncredSchemaAttribute="ngModel">
+                        <div *ngIf="anoncredSchemaAttribute.invalid && (anoncredSchemaAttribute.dirty)" class="alert">
+                            <div *ngIf="anoncredSchemaAttribute.errors?.['required']"> {{'IsRequiredValidation' | translate }}</div>
+                        </div>
+                        <button *ngIf="(schemaAttributes.length > 1 && i < schemaAttributes.length - 1)" style="position: absolute; top: 0; right: 0" pButton pRipple type="button" icon="fa fa-minus" class="p-button-rounded p-button-text"  (click)="deleteAttribute(i)"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

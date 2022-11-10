@@ -1,0 +1,466 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: ssi-studio
+  annotations:
+    description: Tableau de bord facile à utiliser qui permet d'émettre, de vérifier et gérer des attestations d'identité numérique basé sur Hyperledger Aries.
+    tags: CQEN, SQIN, ING, Hyperledger, ARIES, Indy
+objects:
+#postgres-database
+- kind: Secret
+  apiVersion: v1
+  metadata:
+    name: postgres-database
+    annotations:
+      template.openshift.io/expose-database-user: "{.data['database-user']}"
+      template.openshift.io/expose-database-password: "{.data['database-password']}"
+      template.openshift.io/expose-database-admin-user: "{.data['database-admin-user']}"
+      template.openshift.io/expose-database-admin-password: "{.data['database-admin-password']}"
+      template.openshift.io/expose-database-name: "{.data['database-name']}"
+      template.openshift.io/expose-admin-api-key: "{.data['admin-api-key']}"
+  stringData:
+    database-user: "${POSTGRESQL_USERNAME}"
+    database-password: "${POSTGRESQL_PASSWORD}"
+    database-admin-user: "${POSTGRESQL_ADMIN_USERNAME}"
+    database-admin-password: "${POSTGRESQL_ADMIN_PASSWORD}"
+    database-name: "${POSTGRESQL_DATABASE_NAME}"
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: postgres-database
+  spec:
+    ports:
+    - name: postgres-database
+      protocol: TCP
+      port: ${{POSTGRESQL_PORT}}
+      targetPort: ${{POSTGRESQL_PORT}}
+      nodePort: 0
+    selector:
+      name: postgres-database
+    type: ClusterIP
+    sessionAffinity: None
+  status:
+    loadBalancer: {}
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: postgres-database
+  spec:
+    storageClassName: gp2
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: postgres-database
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: 'true'
+    labels:
+      app: postgres-database
+      app.kubernetes.io/part-of: SSI-Studio
+  spec:
+    strategy:
+      type: Recreate
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgres-database
+        from:
+          kind: ImageStreamTag
+          name: postgresql:latest
+          namespace: openshift
+        lastTriggeredImage: ''
+    - type: ConfigChange
+    replicas: 1
+    selector:
+      name: postgres-database
+    template:
+      metadata:
+        labels:
+          name: postgres-database
+      spec:
+        containers:
+        - name: postgres-database
+          image: " "
+          ports:
+          - containerPort: ${{POSTGRESQL_PORT}}
+            protocol: TCP
+          env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-user
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-password
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-name
+          - name: POSTGRESQL_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-admin-password                
+          resources:
+            limits:
+              memory: 512Mi
+          volumeMounts:
+          - name: postgres-database-data
+            mountPath: "/var/lib/pgsql/data"
+          terminationMessagePath: "/dev/termination-log"
+          imagePullPolicy: IfNotPresent
+          capabilities: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+        volumes:
+        - name: postgres-database-data
+          persistentVolumeClaim:
+            claimName: postgres-database
+        restartPolicy: Always
+        dnsPolicy: ClusterFirst
+  status: {}
+#nestjs-backend
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: nestjs-backend
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    annotations:
+      app.openshift.io/vcs-uri: https://github.com/CQEN-QDCE/ssi-studio.git
+      template.alpha.openshift.io/wait-for-ready: "true"
+    labels:
+      app: nestjs-backend
+    name: nestjs-backend
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: nestjs-backend:latest
+    source:
+      contextDir: backend
+      git:
+        uri: https://github.com/CQEN-QDCE/ssi-studio.git
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: Dockerfile
+      type: Docker
+    triggers:
+      - type: ConfigChange
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: nestjs-backend
+    labels:
+      app: nestjs-backend
+      app.kubernetes.io/part-of: SSI-Studio
+  spec:
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 600
+        maxUnavailable: 25%
+        maxSurge: 25%
+      resources: {}
+      activeDeadlineSeconds: 21600
+    triggers:
+      - github:
+          secretReference:
+            name: ssi-studio-build
+        type: GitHub
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - nestjs-backend
+          from:
+            kind: ImageStreamTag
+            name: "nestjs-backend:latest"
+    replicas: 1
+    revisionHistoryLimit: 10
+    test: false
+    selector:
+      app: nestjs-backend
+    template:
+      metadata:
+        labels:
+          app: nestjs-backend
+      spec:
+        containers:
+        - env:
+          - name: MODE
+            value: DEV
+          - name: PORT
+            value: "3000"
+          - name: POSTGRES_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-name
+          - name: POSTGRES_HOST
+            value: postgres-database
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-password
+          - name: POSTGRES_PORT
+            value: "5432"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-database
+                key: database-user
+          - name: RUN_MIGRATIONS
+            value: "false"
+          name: nestjs-backend
+          image: " "
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+        initContainers:
+        - name: init-db
+          image: busybox
+          command: ['sh', '-c', 'until nc -z postgres-database:${POSTGRESQL_PORT}; do echo waiting for db; sleep 2; done;']
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: nestjs-backend
+  spec:
+    selector:
+      app: nestjs-backend
+    ports:
+      - name: "3000"
+        protocol: TCP
+        port: 3000
+        targetPort: 3000
+#angular-frontend (Angular)
+- kind: ConfigMap
+  apiVersion: v1
+  metadata:
+    name: nginx.conf
+  data:
+    nginx.conf: "server {\n\t
+                  listen ${NGINX_PORT} default_server;\n\n\t
+                  client_max_body_size 100M;\n\t
+                  charset utf-8;\n\n\t
+                  location /api/v1 {\n\t\t
+                    proxy_pass http://nestjs-backend:3000/api/v1;\n\t
+                  }\n
+                }"
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: angular-frontend
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    annotations:
+      app.openshift.io/vcs-uri: https://github.com/CQEN-QDCE/ssi-studio.git
+      template.alpha.openshift.io/wait-for-ready: "true"
+    labels:
+      app: angular-frontend
+    name: angular-frontend
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: angular-frontend:latest
+    source:
+      contextDir: frontend
+      git:
+        uri: https://github.com/CQEN-QDCE/ssi-studio.git
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: Dockerfile
+      type: Docker
+    triggers:
+      - type: ConfigChange
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: angular-frontend
+    labels:
+      app: angular-frontend
+      app.kubernetes.io/part-of: SSI-Studio
+  spec:
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 600
+        maxUnavailable: 25%
+        maxSurge: 25%
+      resources: {}
+      activeDeadlineSeconds: 21600
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - angular-frontend
+          from:
+            kind: ImageStreamTag
+            name: "angular-frontend:latest"
+    replicas: 1
+    revisionHistoryLimit: 10
+    test: false
+    selector:
+      app: angular-frontend
+    template:
+      metadata:
+        labels:
+          app: angular-frontend
+      spec:
+        containers:
+          - name: angular-frontend
+            image: " "
+            ports:
+              - containerPort: ${{NGINX_PORT}}
+                protocol: TCP
+            resources: {}
+            volumeMounts:
+            - mountPath: /etc/nginx/conf.d
+              name: nginx-conf-claim
+            - mountPath: /var/cache/nginx/client_temp
+              name: nginx-temp
+            - mountPath: /var/cache/nginx/proxy_temp
+              name: nginx-temp
+            - mountPath: /var/cache/nginx/fastcgi_temp
+              name: nginx-temp
+            - mountPath: /var/cache/nginx/scgi_temp
+              name: nginx-temp
+            - mountPath: /var/cache/nginx/uwsgi_temp
+              name: nginx-temp
+            - mountPath: /var/run/
+              name: nginx-run
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            imagePullPolicy: Always
+        initContainers:
+        - name: init-db
+          image: busybox
+          command: ['sh', '-c', 'until nc -z postgres-database:${POSTGRESQL_PORT}; do echo waiting for db; sleep 2; done;']
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+        volumes:
+        - name: nginx-conf-claim
+          configMap:
+            name: nginx.conf
+        - name: nginx-temp
+          emptyDir: { }
+        - name: nginx-run
+          emptyDir: { }
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: angular-frontend
+  spec:
+    selector:
+      app: angular-frontend
+    ports:
+      - name: "10000"
+        protocol: TCP
+        port: 10000
+        targetPort: ${{NGINX_PORT}}
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: ssi-studio
+  spec:
+    host: ${ROUTE_SUBDOMAIN}.${ROUTE_HOSTNAME}
+    to:
+      kind: Service
+      name: angular-frontend
+      weight: 100
+    port:
+      targetPort: 10000
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: None
+    wildcardPolicy: None
+  status:
+    ingress:
+      - host: ${ROUTE_SUBDOMAIN}.${ROUTE_HOSTNAME}
+        routerName: default
+        conditions:
+          - type: Admitted
+            status: "True"
+        wildcardPolicy: None
+        routerCanonicalHostname: ${ROUTE_HOSTNAME}
+parameters:
+- name: ROUTE_HOSTNAME
+  description: The external hostname to access the application.
+  required: true
+- name: ROUTE_SUBDOMAIN
+  description: The external subdomain to access the application.
+  required: true
+  value: "ssi-studio"
+- name: POSTGRESQL_USERNAME
+  displayName: PostgreSQL connection username
+  description: Username for the PostgreSQL connection user.
+  required: true
+  value: "dbuser"
+- name: POSTGRESQL_PASSWORD
+  displayName: PostgreSQL connection password
+  description: Password for the PostgreSQL connection user.
+  required: true
+  generate: "expression"
+  from: "[a-zA-Z0-9]{16}"
+- name: POSTGRESQL_ADMIN_USERNAME
+  fdisplayName: PostgreSQL administrator username
+  description: Username for the PostgreSQL administrative account.
+  required: true
+  value: "postgres"  
+- name: POSTGRESQL_ADMIN_PASSWORD
+  fdisplayName: PostgreSQL administrator password
+  description: Password for the PostgreSQL administrative account.
+  required: true
+  generate: "expression"
+  from: "[a-zA-Z0-9]{16}"
+- name: POSTGRESQL_DATABASE_NAME
+  displayName: PostgreSQL database name
+  description: Name of the PostgreSQL database.
+  required: true
+  value: "ssi_lab"
+- name: POSTGRESQL_PORT
+  displayName: PostgreSQL database port
+  description: Port on which PostgreSQL listens.
+  required: true
+  value: "5432"
+- name: NGINX_PORT
+  displayName: NGINX port
+  description: Port on which nginx listens.
+  required: true
+  value: "8080"

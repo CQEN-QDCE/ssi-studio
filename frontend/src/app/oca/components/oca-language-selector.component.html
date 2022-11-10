@@ -1,0 +1,18 @@
+<div class="grid">
+    <div class="col-12">
+        <label for="name">Supported languages</label> 
+        <p-multiSelect [showHeader]="false" [options]="languages" selectedItemsLabel="{0} language(s) selected" [(ngModel)]="selectedLanguages" (ngModelChange)="changeSupportedLanguages($event)" [style]="{'width':'100%'}"></p-multiSelect>
+    </div>
+    <div class="col-12">
+        <label for="name">Current language</label> 
+        <p-dropdown id="languageSelector" 
+                    name="languageSelector" 
+                    appendTo="body" 
+                    placeholder="Select language..."
+                    [options]="languages" 
+                    [ngModel]="currentLanguage" 
+                    (ngModelChange)="changeCurrentLanguage($event)"                          
+                    [style]="{'width':'100%'}">
+        </p-dropdown>
+    </div>
+</div>

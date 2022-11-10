@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"name": "SSI Studio",
+			"path": "../"
+		},
+		{
+			"name": "NestJS",
+			"path": "../backend"
+		},
+		{
+			"name": "Angular",
+			"path": "../frontend"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [],
+		"compounds": [{
+			"name": "Launch Server & Client",
+			"configurations": [
+				"Chrome: Launch Client",
+				"Node: Launch Server"
+			]
+		}],
+	}
+}

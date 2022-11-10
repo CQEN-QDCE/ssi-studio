@@ -1,0 +1,14 @@
+.toolbox {
+    position: absolute;
+    margin-top: 0px;
+    width: 180px;
+}
+.form {
+    position: relative;
+    width: calc(100% - 200px);
+    margin-left: 200px;
+    padding-top: 130px;
+}
+.language-selector {
+    margin-top: 10px;
+}

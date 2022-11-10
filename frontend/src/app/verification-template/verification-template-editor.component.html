@@ -1,0 +1,35 @@
+<form #verificationForm="ngForm">
+    <div class="grid">
+        <div class="col-10">
+            <label for="name">{{'NameLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+                <input id="name" name="name" type="text" pInputText [(ngModel)]="verificationTemplate.name" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel" required>
+                <div *ngIf="name.invalid && (name.dirty)" lass="alert">
+                    <div *ngIf="name.errors?.['required']"> Name is required.</div>
+                    <div *ngIf="name.errors?.['maxlength']">Name must be at most 60 characters long.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div for="name" style="margin-bottom: 5px">{{'VerifierAgentLabel' | translate }}*</div>
+            <p-dropdown id="VerificationTemplate" 
+                        name="VerificationTemplate" 
+                        [options]="agentTemplates" 
+                        [(ngModel)]="currentAgentTemplate" 
+                        placeholder="Select..." 
+                        optionLabel="name"
+                        dataKey="id"
+                        appendTo="body" 
+                        [style]="{'width':'100%'}"
+                        (onChange)="changeAgentTemplate($event.value)" 
+                        [disabled]="agentTemplates.length == 0" 
+                        [required]="true"
+                        ngModel #AgentTemplate="ngModel">
+            </p-dropdown>
+            <div *ngIf="AgentTemplate.invalid && (name.dirty)" lass="alert">
+                <div *ngIf="AgentTemplate.errors?.['required']">Verifier agent is required.</div>
+            </div>
+        </div>
+    </div>
+</form>
+<verification-request #verificationRequest [(ngModel)]="verificationTemplate"></verification-request>

@@ -1,0 +1,13 @@
+<div *ngIf="!offerLinkVisible" ngForm #credentialDefinitionForm="ngForm">
+</div>
+<div *ngIf="offerLinkVisible" class="grid">
+    <div class="col-12">
+        <qrcode [qrdata]="qrCodeData" [width]="500" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
+    <div class="col-12">
+        <input id="version" type="text" pInputText [(ngModel)]="offerLinkUrl" maxlength="10" [style]="{'width':'100%'}" ngModel #version="ngModel" readonly>
+    </div>
+</div>
+<div *ngIf="verified" class="grid">
+    Verified.
+</div>

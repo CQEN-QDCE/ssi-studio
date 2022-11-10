@@ -1,0 +1,69 @@
+<!--
+<p-button icon="fa fa-check" (click)="createLegacyForm()" label="Create form"></p-button>
+<p-button icon="fa fa-check" (click)="loadForm()" label="Load"></p-button>
+<p-button icon="fa fa-check" (click)="saveForm()" label="Save"></p-button>
+-->
+<div class="grid" ngForm #ocaForm="ngForm">
+    <div class="col-12">   
+        <label for="formName">Form Name*</label>
+        <div class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input name="formName" type="text" placeholder="Form name" pInputText [(ngModel)]="form.name" maxlength="60" [style]="{'width':'100%'}" ngModel #formName="ngModel" required>
+        </div>
+        <div *ngIf="formName.errors && formName.errors['required']">First Name is required.</div>
+    </div>
+    <div class="col-12">   
+        <label for="name">Description*</label>
+        <div (dragover)="allowDrop($event)" class="ui-inputgroup" [style]="{'width':'100%'}">
+            <input name="description" type="text" placeholder="Description" pInputText [(ngModel)]="form.description" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+        </div>  
+    </div>
+</div>
+<p-dataView [value]="form.categories">
+    <ng-template let-category let-categoryIndex="rowIndex" pTemplate="listItem">
+        <div style="width: 100%">
+        <p-panel>
+            <ng-template pTemplate="header">
+                <div class="ui-inputgroup" [style]="{'width':'100%'}">
+                    <input id="category-name" type="text" placeholder="Category name" pInputText [(ngModel)]="category.name" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel">
+                </div>
+            </ng-template>
+            <ng-template pTemplate="icons">
+                <button pButton class="p-panel-header-icon" (click)="removeCategory(categoryIndex)">
+                    <i class="pi pi-minus"></i>
+                </button>
+            </ng-template>
+            <p-orderList id="{{categoryIndex}}" [value]="category.attributes" pDroppable="controls" [dragdrop]="true" (onDrop)="drop($event)">
+                <ng-template let-attribute pTemplate="item">
+                    <div class="grid" style="border: 1px solid #c8c8c8; margin-top: 3px">
+                        <div class="col-5" style="margin-top: 5px;">
+                            <label>{{attribute.controlLabel}}</label><span *ngIf="attribute.required">*</span><span>[<span *ngIf="attribute.pii">PII: </span>{{attribute.name}}]</span>
+                        </div>
+                        <div class="col-5">
+                            <div class="ui-inputgroup" [style]="{'width':'100%'}">
+                                <input id="default-value" type="text" placeholder="Default value" pInputText [(ngModel)]="attribute.defaultValue" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel" [disabled]="attribute.readOnly">
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button pButton class="p-button-rounded p-button-text" (click)="edit(categoryIndex, attribute)">
+                                <i class="pi pi-user-edit"></i>
+                            </button>        
+                            <button pButton class="p-button-rounded p-button-text" (click)="remove(categoryIndex, attribute)">
+                                <i class="pi pi-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-orderList> 
+        </p-panel>
+        </div>
+    </ng-template>
+</p-dataView>
+<p-dialog header="Edit Attribute" [(visible)]="editAttributeDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
+    <div *ngIf="editAttributeDialogVisible">
+        <oca-attribute-editor [(ngModel)]="selectedAttribute"></oca-attribute-editor>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-close" (click)="cancelEditAttribute()" label="Cancel"></button>
+        <button type="button" pButton icon="fa fa-check" (click)="acceptEditAttribute()" label="OK"></button>
+    </p-footer>
+</p-dialog>

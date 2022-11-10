@@ -1,0 +1,84 @@
+<div class="grid">
+    <div class="col-12">
+        <label for="name">Label</label>
+        <div class="ui-inputgroup">
+            <div>Default Label: {{agentConfig.defaultLabel}}</div>
+            <div>Default Endpoint: {{agentConfig.defaultEndpoint}}</div>
+            <div>Additional Endpoints: {{agentConfig.additionalEndpoints}}</div>
+            <div>Auto Provision: {{agentConfig.autoProvision}}</div>
+        </div>
+    </div>
+    <div class="col-12">
+        <p-panel header="Admin">
+            <div>Enabled: {{agentConfig.admin.enabled}}</div>
+            <div>Insecure Mode: {{agentConfig.admin.insecureMode}}</div>
+            <div>Host: {{agentConfig.admin.host}}</div>
+            <div>Port: {{agentConfig.admin.port}}</div>
+            <div>Client Max Request Size: {{agentConfig.admin.clientMaxRequestSize}}</div>
+            <div>Webhook Urls: {{agentConfig.admin.webhookUrls}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Debug">
+            <div>Auto Respond Credential Proposal: {{agentConfig.debug.autoRespondCredentialProposal}}</div>
+            <div>Auto Respond Credential Offer: {{agentConfig.debug.autoRespondCredentialOffer}}</div>
+            <div>Auto Respond Credential Request: {{agentConfig.debug.autoRespondCredentialRequest}}</div>
+            <div>Auto Respond Presentation Proposal: {{agentConfig.debug.autoRespondPresentationProposal}}</div>
+            <div>Auto Respond Presentation Request: {{agentConfig.debug.autoRespondPresentationRequest}}</div>
+            <div>Auto Store Credential: {{agentConfig.debug.autoStoreCredential}}</div>
+            <div>Auto Accept Invites: {{agentConfig.debug.autoAcceptInvites}}</div>
+            <div>Auto Accept Requests: {{agentConfig.debug.autoAcceptRequests}}</div>
+            <div>Auto Respond Messages: {{agentConfig.debug.autoRespondMessages}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Ledger">
+            <div>Genesis Url: {{agentConfig.ledger.genesisUrl}}</div>
+            <!--<div>Genesis Transactions: {{agentConfig.ledger.genesisTransactions}}</div>-->
+            <div>Keep Alive: {{agentConfig.ledger.keepalive}}</div>
+            <div>Read Only: {{agentConfig.ledger.readOnly}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Log">
+            <div>Level: {{agentConfig.log.level}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Trace">
+            <div>Label: {{agentConfig.trace.label}}</div>
+            <div>Tag: {{agentConfig.trace.tag}}</div>
+            <div>Target: {{agentConfig.trace.target}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Transport">
+            <div>Enable Undelivered Queue: {{agentConfig.transport.enableUndeliveredQueue}}</div>
+            <div>Inbound Configs: {{agentConfig.transport.inboundConfigs}}</div>
+            <div>Max Message Size: {{agentConfig.transport.maxMessageSize}}</div>
+            <div>Max Outbound Retry: {{agentConfig.transport.maxOutboundRetry}}</div>
+            <div>Outbound Configs: {{agentConfig.transport.outboundConfigs}}</div>
+            <div>ws Heartbeat Interval: {{agentConfig.transport.wsHeartbeatInterval}}</div>
+            <div>ws Timeout Interval: {{agentConfig.transport.wsTimeoutInterval}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Wallet">
+            <div>Name: {{agentConfig.wallet.name}}</div>
+            <div>Type: {{agentConfig.wallet.type}}</div>
+            <div>Storage Config: {{agentConfig.wallet.storageConfig}}</div>
+            <div>Storage Type: {{agentConfig.wallet.storageType}}</div>
+        </p-panel>
+    </div>
+    <div class="col-12">
+        <p-panel header="Endorser">
+            <div>Author: {{agentConfig.endorser.author}}</div>
+            <div>Auto Create Rev Reg: {{agentConfig.endorser.autoCreateRevReg}}</div>
+            <div>Auto Endorse: {{agentConfig.endorser.autoEndorse}}</div>
+            <div>Auto Promote Author Did: {{agentConfig.endorser.autoPromoteAuthorDid}}</div>
+            <div>Auto Write: {{agentConfig.endorser.autoWrite}}</div>
+            <div>Endorser: {{agentConfig.endorser.endorser}}</div>
+        </p-panel>
+    </div>
+
+</div>

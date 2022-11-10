@@ -1,0 +1,9 @@
+:host ::ng-deep .p-orderlist-controls {
+    display: none !important;
+}
+:host ::ng-deep .p-orderlist-list {
+    border: none !important; 
+}
+:host ::ng-deep .p-dataview.p-dataview-list .p-dataview-content > .p-grid > div {
+    border: none !important; 
+}

@@ -1,0 +1,64 @@
+<form #verificationForm="ngForm">
+    <div class="grid">
+        <div class="col-12" *ngFor="let credentialRequest of verificationTemplate.credentialRequests; let cri = index">
+            <div class="credential-request">
+                <label>{{'RequestedCredentialNameLabel' | translate }}*</label>
+                <input name="requested-credential-name-{{cri}}" pInputText type="text" [(ngModel)]="credentialRequest.requestedName" [style]="{'width':'calc(100% - 50px)'}" maxlength="60" size="60" ngModel #requestedCredentialName="ngModel" required>
+                <div *ngIf="requestedCredentialName.invalid && (requestedCredentialName.dirty)" class="alert">
+                    <div class="errorMessage" *ngIf="requestedCredentialName.errors?.['required']"> Requested credential name is required.</div>
+                    <div class="errorMessage" *ngIf="requestedCredentialName.errors?.['maxlength']">Requested credential name must be at most 60 characters long.</div>
+                </div>
+                <div>
+                    <label>{{'DefineRequestedAttributeLabel' | translate }}</label>
+                    <div>{{'DefineRequestedAttributeTip' | translate }}</div>
+                    <div *ngFor="let attribute of credentialRequest.requestedAttributes; let rai = index" class="col-12" [style]="{'padding-left':'0px', 'padding-right':'0px'}">
+                        <input id="AttributeName{{cri}}{{rai}}" name="AttributeName{{cri}}{{rai}}" pInputText type="text" [(ngModel)]="attribute.name" [style]="{'width':'calc(100% - 50px)'}" (ngModelChange)="addRequestedAttribute(cri,rai)">
+                        <button class="p-button-secondary p-button-rounded button-remove" *ngIf="rai < credentialRequest.requestedAttributes.length - 1" pButton icon="fa fa-trash" (click)="removeAttribute(cri,rai)"></button>
+                    </div>
+                </div>
+                <div *ngFor="let requestedPredicate of credentialRequest.requestedPredicates; let k = index" class="col-12" [style]="{'padding-left':'0px', 'padding-right':'0px'}">
+                    <div class="grid">
+                        <div class="col-12" [style]="{'width':'calc(100% - 50px)'}">
+                            <div class="grid">
+                                <div class="col-6">
+                                    <label>{{'AttributeLabel' | translate }}*</label>
+                                    <input id="PredicateName{{cri}}{{k}}" name="PredicateName{{cri}}{{k}}" pInputText type="text" [(ngModel)]="requestedPredicate.name" [style]="{'width':'100%'}">
+                                </div>
+                                <div class="col-3">
+                                    <label>{{'ConditionLabel' | translate }}</label>
+                                    <p-dropdown id="PredicateCondition{{cri}}{{k}}" 
+                                                name="PredicateCondition{{cri}}{{k}}" 
+                                                appendTo="body" 
+                                                [options]="conditions" 
+                                                [(ngModel)]="requestedPredicate.condition" 
+                                                [style]="{'width':'100%'}">
+                                    </p-dropdown>  
+                                </div>
+                                <div class="col-3">
+                                    <label>{{'ValueLabel' | translate }}*</label>
+                                    <input id="PredicateValue{{cri}}{{k}}" name="PredicateValue{{cri}}{{k}}" pInputText type="text" [(ngModel)]="requestedPredicate.value" [style]="{'width':'100%'}">
+                               </div>
+                            </div>
+                        </div>
+                        <button style="float: right;margin-top: 25px;" pButton pRipple icon="fa fa-trash" class="p-button-secondary p-button-rounded" (click)="removePredicate(cri,k)"></button>
+                    </div>
+                </div>
+                <button pButton icon="fa fa-plus" class="p-button-text" label="{{'PredicateConstraintLabel' | translate }}" (click)="addRequestedPredicate(cri)" [style]="{'padding-left':'0px', 'padding-right':'0px'}"></button>
+                <div style="margin-top: 20px;">{{'RestrictionsLabel' | translate }}</div>
+                <p-selectButton id="Restrictions{{cri}}" name="Restrictions{{cri}}" [options]="restrictions" [(ngModel)]="credentialRequest.restrictions" (ngModelChange)="restrictionChange($event,cri)" dataKey="type" [multiple]="true" optionLabel="name" optionValue="value" [style]="{'margin-top':'5px'}">
+                    <ng-template let-item>
+                        <div style="width: 200px">{{item.name | restriction}}</div>
+                    </ng-template>
+                </p-selectButton>
+                <div class="grid" [style]="{'margin-top':'20px'}">
+                    <div *ngFor="let restriction of credentialRequest.restrictions; let k = index" class="col-6">
+                        <label>{{restriction.type | restriction}}*</label>
+                        <input id="RestrictionValue{{cri}}{{k}}" name="RestrictionValue{{cri}}{{k}}" pInputText type="text" [(ngModel)]="restriction.value" [style]="{'width':'100%'}">
+                    </div>
+                </div>
+                <button pButton icon="fa fa-trash" class="p-button-secondary p-button-rounded" (click)="removeCredentialRequest(cri)"></button>
+            </div>
+        </div>
+    </div>
+</form>
+<button pButton icon="fa fa-plus" class="p-button-rounded p-button-success mr-2" label="{{'CredentialRequestLabel' | translate }}" (click)="addCredentialRequest()"></button>
