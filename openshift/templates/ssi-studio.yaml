@@ -1,16 +1,29 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: ssi-studio
+  name: ${APP_NAME}
   annotations:
-    description: Tableau de bord facile à utiliser qui permet d'émettre, de vérifier et gérer des attestations d'identité numérique basé sur Hyperledger Aries.
-    tags: CQEN, SQIN, ING, Hyperledger, ARIES, Indy
+    description: Outils et services qui facilitent l'émission, la vérification et la gestion d'attestations d'identité numérique basé sur Hyperledger Aries-Indy.
+    tags: CQEN, SQIN, ING, Hyperledger, ARIES, Indy, Angular, NestJS, PostgreSql
 objects:
-#postgres-database
+######################################################################
+# PostgreSql Database
+######################################################################
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: ${POSTGRESQL_NAME}
+  spec:
+    storageClassName: ${STORAGE_CLASS_NAME}
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${POSTGRESQL_VOLUME_SIZE}
 - kind: Secret
   apiVersion: v1
   metadata:
-    name: postgres-database
+    name: ${POSTGRESQL_NAME}
     annotations:
       template.openshift.io/expose-database-user: "{.data['database-user']}"
       template.openshift.io/expose-database-password: "{.data['database-password']}"
@@ -24,42 +37,14 @@ objects:
     database-admin-user: "${POSTGRESQL_ADMIN_USERNAME}"
     database-admin-password: "${POSTGRESQL_ADMIN_PASSWORD}"
     database-name: "${POSTGRESQL_DATABASE_NAME}"
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: postgres-database
-  spec:
-    ports:
-    - name: postgres-database
-      protocol: TCP
-      port: ${{POSTGRESQL_PORT}}
-      targetPort: ${{POSTGRESQL_PORT}}
-      nodePort: 0
-    selector:
-      name: postgres-database
-    type: ClusterIP
-    sessionAffinity: None
-  status:
-    loadBalancer: {}
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
-    name: postgres-database
-  spec:
-    storageClassName: gp2
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: postgres-database
+    name: ${POSTGRESQL_NAME}
     annotations:
       template.alpha.openshift.io/wait-for-ready: 'true'
     labels:
-      app: postgres-database
+      app: ${POSTGRESQL_NAME}
       app.kubernetes.io/part-of: SSI-Studio
   spec:
     strategy:
@@ -69,7 +54,7 @@ objects:
       imageChangeParams:
         automatic: true
         containerNames:
-        - postgres-database
+        - ${POSTGRESQL_NAME}
         from:
           kind: ImageStreamTag
           name: postgresql:latest
@@ -78,14 +63,14 @@ objects:
     - type: ConfigChange
     replicas: 1
     selector:
-      name: postgres-database
+      name: ${POSTGRESQL_NAME}
     template:
       metadata:
         labels:
-          name: postgres-database
+          name: ${POSTGRESQL_NAME}
       spec:
         containers:
-        - name: postgres-database
+        - name: ${POSTGRESQL_NAME}
           image: " "
           ports:
           - containerPort: ${{POSTGRESQL_PORT}}
@@ -94,28 +79,28 @@ objects:
           - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-user
           - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-password
           - name: POSTGRESQL_DATABASE
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-name
           - name: POSTGRESQL_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-admin-password                
           resources:
             limits:
               memory: 512Mi
           volumeMounts:
-          - name: postgres-database-data
+          - name: ${POSTGRESQL_NAME}-data
             mountPath: "/var/lib/pgsql/data"
           terminationMessagePath: "/dev/termination-log"
           imagePullPolicy: IfNotPresent
@@ -124,35 +109,54 @@ objects:
             capabilities: {}
             privileged: false
         volumes:
-        - name: postgres-database-data
+        - name: ${POSTGRESQL_NAME}-data
           persistentVolumeClaim:
-            claimName: postgres-database
+            claimName: ${POSTGRESQL_NAME}
         restartPolicy: Always
         dnsPolicy: ClusterFirst
   status: {}
-#nestjs-backend
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${POSTGRESQL_NAME}
+  spec:
+    ports:
+    - name: ${POSTGRESQL_NAME}
+      protocol: TCP
+      port: ${{POSTGRESQL_PORT}}
+      targetPort: ${{POSTGRESQL_PORT}}
+      nodePort: 0
+    selector:
+      name: ${POSTGRESQL_NAME}
+    type: ClusterIP
+    sessionAffinity: None
+  status:
+    loadBalancer: {}
+######################################################################
+# NestJS Backend
+######################################################################
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: nestjs-backend
+    name: ${NESTJS_NAME}
 - kind: BuildConfig
   apiVersion: v1
   metadata:
     annotations:
-      app.openshift.io/vcs-uri: https://github.com/CQEN-QDCE/ssi-studio.git
+      app.openshift.io/vcs-uri: ${GITHUB_REPOSITORY_URI}
       template.alpha.openshift.io/wait-for-ready: "true"
     labels:
-      app: nestjs-backend
-    name: nestjs-backend
+      app: ${NESTJS_NAME}
+    name: ${NESTJS_NAME}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: nestjs-backend:latest
+        name: ${NESTJS_NAME}:latest
     source:
       contextDir: backend
       git:
-        uri: https://github.com/CQEN-QDCE/ssi-studio.git
+        uri: ${GITHUB_REPOSITORY_URI}
       type: Git
     strategy:
       dockerStrategy:
@@ -163,9 +167,9 @@ objects:
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: nestjs-backend
+    name: ${NESTJS_NAME}
     labels:
-      app: nestjs-backend
+      app: ${NESTJS_NAME}
       app.kubernetes.io/part-of: SSI-Studio
   spec:
     strategy:
@@ -188,19 +192,19 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - nestjs-backend
+            - ${NESTJS_NAME}
           from:
             kind: ImageStreamTag
-            name: "nestjs-backend:latest"
+            name: "${NESTJS_NAME}:latest"
     replicas: 1
     revisionHistoryLimit: 10
     test: false
     selector:
-      app: nestjs-backend
+      app: ${NESTJS_NAME}
     template:
       metadata:
         labels:
-          app: nestjs-backend
+          app: ${NESTJS_NAME}
       spec:
         containers:
         - env:
@@ -211,25 +215,25 @@ objects:
           - name: POSTGRES_DATABASE
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-name
           - name: POSTGRES_HOST
-            value: postgres-database
+            value: ${POSTGRESQL_NAME}
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-password
           - name: POSTGRES_PORT
             value: "5432"
           - name: POSTGRES_USER
             valueFrom:
               secretKeyRef:
-                name: postgres-database
+                name: ${POSTGRESQL_NAME}
                 key: database-user
           - name: RUN_MIGRATIONS
             value: "false"
-          name: nestjs-backend
+          name: ${NESTJS_NAME}
           image: " "
           ports:
             - containerPort: 3000
@@ -241,7 +245,7 @@ objects:
         initContainers:
         - name: init-db
           image: busybox
-          command: ['sh', '-c', 'until nc -z postgres-database:${POSTGRESQL_PORT}; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z ${POSTGRESQL_NAME}:${POSTGRESQL_PORT}; do echo waiting for db; sleep 2; done;']
         restartPolicy: Always
         terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirst
@@ -250,10 +254,10 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: nestjs-backend
+    name: ${NESTJS_NAME}
   spec:
     selector:
-      app: nestjs-backend
+      app: ${NESTJS_NAME}
     ports:
       - name: "3000"
         protocol: TCP
@@ -270,31 +274,31 @@ objects:
                   client_max_body_size 100M;\n\t
                   charset utf-8;\n\n\t
                   location /api/v1 {\n\t\t
-                    proxy_pass http://nestjs-backend:3000/api/v1;\n\t
+                    proxy_pass http://${NESTJS_NAME}:3000/api/v1;\n\t
                   }\n
                 }"
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: angular-frontend
+    name: ${ANGULAR_NAME}
 - kind: BuildConfig
   apiVersion: v1
   metadata:
     annotations:
-      app.openshift.io/vcs-uri: https://github.com/CQEN-QDCE/ssi-studio.git
+      app.openshift.io/vcs-uri: ${GITHUB_REPOSITORY_URI}
       template.alpha.openshift.io/wait-for-ready: "true"
     labels:
-      app: angular-frontend
-    name: angular-frontend
+      app: ${ANGULAR_NAME}
+    name: ${ANGULAR_NAME}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: angular-frontend:latest
+        name: ${ANGULAR_NAME}:latest
     source:
       contextDir: frontend
       git:
-        uri: https://github.com/CQEN-QDCE/ssi-studio.git
+        uri: ${GITHUB_REPOSITORY_URI}
       type: Git
     strategy:
       dockerStrategy:
@@ -305,9 +309,9 @@ objects:
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: angular-frontend
+    name: ${ANGULAR_NAME}
     labels:
-      app: angular-frontend
+      app: ${ANGULAR_NAME}
       app.kubernetes.io/part-of: SSI-Studio
   spec:
     strategy:
@@ -326,22 +330,22 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - angular-frontend
+            - ${ANGULAR_NAME}
           from:
             kind: ImageStreamTag
-            name: "angular-frontend:latest"
+            name: "${ANGULAR_NAME}:latest"
     replicas: 1
     revisionHistoryLimit: 10
     test: false
     selector:
-      app: angular-frontend
+      app: ${ANGULAR_NAME}
     template:
       metadata:
         labels:
-          app: angular-frontend
+          app: ${ANGULAR_NAME}
       spec:
         containers:
-          - name: angular-frontend
+          - name: ${ANGULAR_NAME}
             image: " "
             ports:
               - containerPort: ${{NGINX_PORT}}
@@ -368,7 +372,7 @@ objects:
         initContainers:
         - name: init-db
           image: busybox
-          command: ['sh', '-c', 'until nc -z postgres-database:${POSTGRESQL_PORT}; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z ${POSTGRESQL_NAME}:${POSTGRESQL_PORT}; do echo waiting for db; sleep 2; done;']
         restartPolicy: Always
         terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirst
@@ -385,10 +389,10 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: angular-frontend
+    name: ${ANGULAR_NAME}
   spec:
     selector:
-      app: angular-frontend
+      app: ${ANGULAR_NAME}
     ports:
       - name: "10000"
         protocol: TCP
@@ -397,12 +401,12 @@ objects:
 - kind: Route
   apiVersion: v1
   metadata:
-    name: ssi-studio
+    name: ${APP_NAME}
   spec:
-    host: ${ROUTE_SUBDOMAIN}.${ROUTE_HOSTNAME}
+    host: ${ROUTE_SUBDOMAIN}.${APP_DOMAIN}
     to:
       kind: Service
-      name: angular-frontend
+      name: ${ANGULAR_NAME}
       weight: 100
     port:
       targetPort: 10000
@@ -412,15 +416,20 @@ objects:
     wildcardPolicy: None
   status:
     ingress:
-      - host: ${ROUTE_SUBDOMAIN}.${ROUTE_HOSTNAME}
+      - host: ${ROUTE_SUBDOMAIN}.${APP_DOMAIN}
         routerName: default
         conditions:
           - type: Admitted
             status: "True"
         wildcardPolicy: None
-        routerCanonicalHostname: ${ROUTE_HOSTNAME}
+        routerCanonicalHostname: ${APP_DOMAIN}
 parameters:
-- name: ROUTE_HOSTNAME
+- name: APP_NAME
+  displayName: Application name
+  description: Used to group components together in the OpenShift console.
+  required: true
+  value: "ssi-studio"
+- name: APP_DOMAIN
   description: The external hostname to access the application.
   required: true
 - name: ROUTE_SUBDOMAIN
@@ -464,3 +473,32 @@ parameters:
   description: Port on which nginx listens.
   required: true
   value: "8080"
+- name: POSTGRESQL_NAME
+  displayName: PostgreSQL name
+  description: The name assigned to all PostgreSQL objects defined in this template.
+  required: true
+  value: "postgres-database"
+- name: STORAGE_CLASS_NAME
+  displayNgp2iption: The storage class of the volume.
+  required: true
+  value: gp2
+- name: POSTGRESQL_VOLUME_SIZE
+  displayName: PostgreSql volume size
+  description: The size of the PostgreSql persistent volume, e.g. 512Mi, 1Gi, 2Gi.
+  required: true
+  value: 1Gi
+- name: NESTJS_NAME
+  displayName: NestJS name
+  description: The name assigned to all NestJS objects defined in this template.
+  required: true
+  value: "nestjs-backend"
+- name: ANGULAR_NAME
+  displayName: Angular name
+  description: The name assigned to all Angular objects defined in this template.
+  required: true
+  value: "angular-frontend"
+- name: GITHUB_REPOSITORY_URI
+  displayName: GitHub repository URI
+  description: URI of the GitHub repository.
+  required: true
+  value: "https://github.com/CQEN-QDCE/ssi-studio.git"
