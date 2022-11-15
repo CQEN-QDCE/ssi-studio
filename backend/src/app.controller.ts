@@ -4,8 +4,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/api/v1')
 export class AppController {
-  constructor(private readonly authService: AuthService) {}
-
+  constructor() {}
+/*
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() request) {
@@ -17,4 +17,5 @@ export class AppController {
   async testjwt(@Request() request) {
     return 'Hello';
   }
+  */
 }

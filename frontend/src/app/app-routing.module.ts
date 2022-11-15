@@ -6,14 +6,15 @@ import { HomeComponent } from './dashboard/home.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { VerificationTemplateComponent } from './verification-template/verification-template.component';
 import { AgentTemplateComponent } from './agent-template/agent-template.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'organizations/:id', component: OrganizationComponent, children: [
-    { path: 'connections', component: ConnectionsComponent },
-    { path: 'credentials', component: CredentialTemplateComponent },
-    { path: 'verifications', component: VerificationTemplateComponent },
-    { path: 'agents', component: AgentTemplateComponent }
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'organizations/:id', component: OrganizationComponent, canActivate: [AuthGuard], children: [
+    { path: 'connections', component: ConnectionsComponent, canActivate: [AuthGuard] },
+    { path: 'credentials', component: CredentialTemplateComponent, canActivate: [AuthGuard] },
+    { path: 'verifications', component: VerificationTemplateComponent, canActivate: [AuthGuard] },
+    { path: 'agents', component: AgentTemplateComponent, canActivate: [AuthGuard] }
   ]}
 ];
 
