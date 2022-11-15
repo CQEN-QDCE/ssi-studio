@@ -34,7 +34,6 @@ export class OrganizationsViewComponent implements OnInit, OnDestroy {
         this.organizationService.getAll().pipe(takeUntil(this.ngUnsubscribe)).subscribe(organizations => {
             this.organizations = organizations;
         });
-        await lastValueFrom(this.translate.get('Translation'));
     }
 
     ngOnDestroy(): any {

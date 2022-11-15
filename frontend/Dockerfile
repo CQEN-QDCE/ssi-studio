@@ -10,7 +10,7 @@ WORKDIR /app
 COPY . .
 
 # Install all the dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Generate the build of the application
 RUN npm run build --prod
@@ -23,5 +23,11 @@ FROM nginx:alpine
 
 # COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
+COPY replace_placeholders.sh /
+
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /app/dist/ssi-studio /etc/nginx/html
+
+ENTRYPOINT [ "sh", "/replace_placeholders.sh" ]
+
+CMD ["nginx",  "-g", "daemon off;"]

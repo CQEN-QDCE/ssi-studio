@@ -1,13 +1,15 @@
+# To clean up as much as possible excluding components that are in use, run this command:
+# docker system prune -a
 version: '3.8'
 services:
   database:
     image: postgres:alpine
     environment:
-      POSTGRES_DB: ssi_lab
+      POSTGRES_DB: ssi_studio
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_PASSWORD: password
     ports:
-      - '5432:5432'
+      - 5433:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
   api:
@@ -17,7 +19,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
@@ -27,11 +29,14 @@ services:
       - POSTGRES_HOST=database
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_DATABASE=ssi_lab
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DATABASE=ssi_studio
       - PORT=3000
       - MODE=DEV
       - RUN_MIGRATIONS=false
+      - KEYCLOAK_URL=http://keycloak.localhost:8080
+      - KEYCLOAK_REALM=SSI-Studio
+      - KEYCLOAK_CLIENT_ID=angular-app
   frontend:
     container_name: angular
     image: angular:1.0.0
@@ -45,5 +50,44 @@ services:
     restart: unless-stopped
     depends_on:
       - api
+    environment: 
+      - KEYCLOAK_URL=http://keycloak.localhost:8080
+      - KEYCLOAK_REALM=SSI-Studio
+      - KEYCLOAK_CLIENT_ID=angular-app
+  pgadmin-compose:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: "admin"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports: 
+      - "16543:80"
+    depends_on: 
+      - database    
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.2
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: database
+      DB_DATABASE: ssi_studio
+      DB_USER: postgres
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      JAVA_OPTS: -Dkeycloak.profile=preview
+      KEYCLOAK_LOGLEVEL: DEBUG
+      ROOT_LOGLEVEL: DEBUG
+    command:
+      - start-dev
+    ports:
+      - 8080:8080
+      - 8443:8443
+    networks:
+      default:
+        aliases:
+          - "keycloak.localhost"
+    depends_on:
+      - database
 volumes:
   postgres_data:

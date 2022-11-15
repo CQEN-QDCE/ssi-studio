@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FormsModule } from '@angular/forms';
@@ -79,6 +79,10 @@ import { ErrorDialogComponent } from './error/error-dialog.component';
 import { IssueCredentialService } from './services/issue-credential.service';
 import { IssueCredentialComponent } from './issue-credential/issue-credential.component';
 import { RevocationService } from './services/revocation.service';
+import { initializeKeycloak } from './init/keycloak-init.factory';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { ConfigInitService } from './init/config-init.service';
+import { translateInitializerFactory } from './init/translate-init.factory';
 
 @NgModule({
   declarations: [
@@ -117,6 +121,7 @@ import { RevocationService } from './services/revocation.service';
   ],
   imports: [
     HttpClientModule,
+    KeycloakAngularModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -148,7 +153,7 @@ import { RevocationService } from './services/revocation.service';
     OrderListModule,
     MenubarModule,
     ConfirmDialogModule,
-    QRCodeModule
+    QRCodeModule,
   ],
   providers: [
     ConnectionService,
@@ -169,11 +174,24 @@ import { RevocationService } from './services/revocation.service';
     OcaRepositoryService,
     OcaService,
     ConfirmationService,
+    ConfigInitService,
     ErrorDialogService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorIntercept,
       multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: translateInitializerFactory,
+      multi: true,
+      deps: [TranslateService],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService, ConfigInitService],
     }
   ],
   bootstrap: [AppComponent]
