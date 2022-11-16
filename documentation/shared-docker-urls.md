@@ -9,6 +9,12 @@ api, une API HTTP JSON
 localstack, un remplacement de AWS S3
 L'application web s'attend à recevoir de l'API des URL de fichiers qu'elle peut résoudre. L'api, quant à elle, ne dispose que d'une seule variable d'environnement pour configurer l'emplacement de l'application localstack. Cela signifie que lorsque nous essayons d'accéder à des fichiers sur localstack depuis notre machine de développement (dans le navigateur) et depuis l'intérieur du contexte Docker (l'api), il faut que cela fonctionne avec le même nom.
 
+<p align="center">
+  <img src="images/vc-authn-issuer.png" label="Environnement de test" />
+
+  <br>
+  <b>Émission de l'attestation d'identité vérifiable à l'utilisateur</b>
+</p>
 
 L'astuce pour y parvenir consiste à utiliser un domaine .localhost, qui est généralement résolu à l'adresse de bouclage 127.0.0.1. Cela signifie que les ports exposés à partir des conteneurs Docker sont accessibles via http://<some-name>.localhost:<exposed-port> à partir de sa propre machine en dehors du réseau Docker. À l'intérieur de la configuration réseau de Docker Compose, vous pouvez ajouter un alias réseau :
 
