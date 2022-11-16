@@ -4,9 +4,9 @@ Docker est de plus en plus utilisé durant la phase de développement pour rédu
 
 Supposons qu'une application se compose de quatres services :
 
-web, une application client qui s'exécute dans le navigateur et qui parle à l'API.
-api, une API HTTP JSON
-keycloak, un remplacement de AWS S3
+* web, une application client qui s'exécute dans le navigateur et qui parle à l'API.
+* api, une API HTTP JSON
+* keycloak, un remplacement de AWS S3
 
 L'application web s'attend à recevoir de l'API des URL de fichiers qu'elle peut résoudre. L'api, quant à elle, ne dispose que d'une seule variable d'environnement pour configurer l'emplacement de l'application localstack. Cela signifie que lorsque nous essayons d'accéder à des fichiers sur localstack depuis notre machine de développement (dans le navigateur) et depuis l'intérieur du contexte Docker (l'api), il faut que cela fonctionne avec le même nom.
 
