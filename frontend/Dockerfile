@@ -28,6 +28,9 @@ COPY replace_placeholders.sh /
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /app/dist/ssi-studio /etc/nginx/html
 
+RUN chgrp -R 0 /etc/nginx/html/assets/config \
+    && chmod -R g+rwX /etc/nginx/html/assets/config
+
 ENTRYPOINT [ "sh", "/replace_placeholders.sh" ]
 
 CMD ["nginx",  "-g", "daemon off;"]
