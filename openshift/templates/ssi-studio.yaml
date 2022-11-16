@@ -1,3 +1,6 @@
+######################################################################
+# oc process -f ./ssi-studio.yaml --param-file=./ssi-studio.dev.params | oc apply -f -
+######################################################################
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
@@ -233,6 +236,12 @@ objects:
                 key: database-user
           - name: RUN_MIGRATIONS
             value: "false"
+          - name: KEYCLOAK_URL
+            value: https://${KEYCLOAK_SUBDOMAIN}.${APP_DOMAIN}
+          - name: KEYCLOAK_REALM
+            value: ${KEYCLOAK_REALM}
+          - name: KEYCLOAK_CLIENT_ID
+            value: ${KEYCLOAK_CLIENT_ID}
           name: ${NESTJS_NAME}
           image: " "
           ports:
@@ -350,6 +359,13 @@ objects:
             ports:
               - containerPort: ${{NGINX_PORT}}
                 protocol: TCP
+            env:
+            - name: KEYCLOAK_URL
+              value: https://${KEYCLOAK_SUBDOMAIN}.${APP_DOMAIN}
+            - name: KEYCLOAK_REALM
+              value: ${KEYCLOAK_REALM}
+            - name: KEYCLOAK_CLIENT_ID
+              value: ${KEYCLOAK_CLIENT_ID}
             resources: {}
             volumeMounts:
             - mountPath: /etc/nginx/conf.d
@@ -403,7 +419,7 @@ objects:
   metadata:
     name: ${APP_NAME}
   spec:
-    host: ${ROUTE_SUBDOMAIN}.${APP_DOMAIN}
+    host: ${APP_SUBDOMAIN}.${APP_DOMAIN}
     to:
       kind: Service
       name: ${ANGULAR_NAME}
@@ -416,13 +432,149 @@ objects:
     wildcardPolicy: None
   status:
     ingress:
-      - host: ${ROUTE_SUBDOMAIN}.${APP_DOMAIN}
+      - host: ${APP_SUBDOMAIN}.${APP_DOMAIN}
         routerName: default
         conditions:
           - type: Admitted
             status: "True"
         wildcardPolicy: None
         routerCanonicalHostname: ${APP_DOMAIN}
+######################################################################
+# Keycloak
+######################################################################
+- kind: Secret
+  apiVersion: v1
+  metadata:
+    name: ${KEYCLOAK_NAME}
+    annotations:
+      template.openshift.io/expose-keycloak-admin-user: "{.data['keycloak-admin-user']}"
+      template.openshift.io/expose-keycloak-admin-password: "{.data['keycloak-admin-password']}"
+  stringData:
+    keycloak-admin-user: "${KEYCLOAK_ADMIN_USER}"
+    keycloak-admin-password: "${KEYCLOAK_ADMIN_PASSWORD}"
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: ${KEYCLOAK_NAME}
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: 'true'
+    labels:
+      app: ${KEYCLOAK_NAME}
+      app.kubernetes.io/part-of: SSI-Studio
+  spec:
+    strategy:
+      type: Recreate
+    replicas: 1
+    selector:
+      name: ${KEYCLOAK_NAME}
+    template:
+      metadata:
+        labels:
+          name: ${KEYCLOAK_NAME}
+      spec:
+        containers:
+        - args:
+          - start-dev
+          name: ${KEYCLOAK_NAME}
+          image: quay.io/keycloak/keycloak:18.0.2
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+          env:
+          - name: DB_ADDR
+            value: ${POSTGRESQL_NAME}
+          - name: DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: ${POSTGRESQL_NAME}
+                key: database-name
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${POSTGRESQL_NAME}
+                key: database-password
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${POSTGRESQL_NAME}
+                key: database-user
+          - name: DB_VENDOR
+            value: POSTGRES
+          - name: JAVA_OPTS
+            value: -Dkeycloak.profile=preview
+          - name: KEYCLOAK_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: ${KEYCLOAK_NAME}
+                key: keycloak-admin-user
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${KEYCLOAK_NAME}
+                key: keycloak-admin-password
+          - name: KEYCLOAK_LOGLEVEL
+            value: DEBUG
+          - name: ROOT_LOGLEVEL
+            value: DEBUG     
+          - name: KC_PROXY
+            value: 'edge'
+          resources:
+            limits:
+              memory: 512Mi
+          imagePullPolicy: IfNotPresent
+          capabilities: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+        restartPolicy: Always
+        dnsPolicy: ClusterFirst
+  status: {}
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${KEYCLOAK_NAME}
+  spec:
+    ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "8443"
+      port: 8443
+      targetPort: 8443
+    selector:
+      name: ${KEYCLOAK_NAME}
+    type: ClusterIP
+    sessionAffinity: None
+  status:
+    loadBalancer: {}
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: ${APP_NAME}-keycloak
+  spec:
+    host: ${KEYCLOAK_SUBDOMAIN}.${APP_DOMAIN}
+    to:
+      kind: Service
+      name: ${KEYCLOAK_NAME}
+      weight: 100
+    port:
+      targetPort: 8080
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: None
+    wildcardPolicy: None
+  status:
+    ingress:
+      - host: ${KEYCLOAK_SUBDOMAIN}.${APP_DOMAIN}
+        routerName: default
+        conditions:
+          - type: Admitted
+            status: "True"
+        wildcardPolicy: None
+        routerCanonicalHostname: ${APP_DOMAIN}
+######################################################################
+# Parameters
+######################################################################
 parameters:
 - name: APP_NAME
   displayName: Application name
@@ -432,10 +584,14 @@ parameters:
 - name: APP_DOMAIN
   description: The external hostname to access the application.
   required: true
-- name: ROUTE_SUBDOMAIN
+- name: APP_SUBDOMAIN
   description: The external subdomain to access the application.
   required: true
   value: "ssi-studio"
+- name: KEYCLOAK_SUBDOMAIN
+  description: The external subdomain to access the application.
+  required: true
+  value: "ssi-studio-keycloak"
 - name: POSTGRESQL_USERNAME
   displayName: PostgreSQL connection username
   description: Username for the PostgreSQL connection user.
@@ -502,3 +658,29 @@ parameters:
   description: URI of the GitHub repository.
   required: true
   value: "https://github.com/CQEN-QDCE/ssi-studio.git"
+- name: KEYCLOAK_NAME
+  displayName: Keycloak name
+  description: The name assigned to all Keycloak objects defined in this template.
+  required: true
+  value: "keycloak"
+- name: KEYCLOAK_ADMIN_USER
+  displayName: Keycloak administrator username
+  description: Username for the Keycloak administrative account.
+  required: true
+  value: "admin"
+- name: KEYCLOAK_ADMIN_PASSWORD
+  displayName: Keycloak administrator password
+  description: Password for the Keycloak administrative account.
+  required: true
+  generate: "expression"
+  from: "[a-zA-Z0-9]{16}"
+- name: KEYCLOAK_REALM
+  displayName: Keycloak realm
+  description: Keycloak realm.
+  required: true
+  value: "SSI-Studio"
+- name: KEYCLOAK_CLIENT_ID
+  displayName: Keycloak client id
+  description: Keycloak client identifier.
+  required: true
+  value: "angular-app"
