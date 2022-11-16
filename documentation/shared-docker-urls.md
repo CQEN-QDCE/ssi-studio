@@ -11,7 +11,7 @@ keycloak, un remplacement de AWS S3
 L'application web s'attend à recevoir de l'API des URL de fichiers qu'elle peut résoudre. L'api, quant à elle, ne dispose que d'une seule variable d'environnement pour configurer l'emplacement de l'application localstack. Cela signifie que lorsque nous essayons d'accéder à des fichiers sur localstack depuis notre machine de développement (dans le navigateur) et depuis l'intérieur du contexte Docker (l'api), il faut que cela fonctionne avec le même nom.
 
 <p align="center">
-  <img src="images/urls-in-docker.png" label="Environnement de test" />
+  <img src="images/shared-docker-urls.png" label="Environnement de test" />
 
   <br>
   <b>Émission de l'attestation d'identité vérifiable à l'utilisateur</b>
