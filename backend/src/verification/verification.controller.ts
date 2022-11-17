@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Request, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Verification } from 'src/model/verification.entity';
 import { VerificationService } from './verification.service';
 import { v4 as uuidv4 } from 'uuid';
+import { Roles, RoleMatchingMode } from 'nest-keycloak-connect';
 
 @Controller('/api/v1')
 export class VerificationController {
@@ -10,21 +11,24 @@ export class VerificationController {
     }
 
     @Get('organizations/:id/verifications')
-    public async getAll(@Param('id') id) {
-      return await this.service.getAll(id);
+    @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
+    public async getAll(@Param('id') id, @Request() request) {
+      return await this.service.getAll(id, request.user.sub);
     }
 
     @Get('/verifications/:id')
-    public async get(@Param('id') id) {
-      return await this.service.get(id);
+    @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
+    public async get(@Param('id') id, @Request() request) {
+      return await this.service.get(id, request.user.sub);
     }
 
     @Post('/verifications')
-    public async create(@Body() dto: Verification) {
+    @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
+    public async create(@Body() dto: Verification, @Request() request) {
       const verification = new Verification();
       verification.id = uuidv4();
-      verification.createdBy = 'me';
-      verification.lastChangedBy = 'me';
+      verification.createdBy = request.user.sub;
+      verification.lastChangedBy = request.user.sub;
       verification.name = dto.name;
       verification.organizationId = dto.organizationId;
       verification.credentialRequests = dto.credentialRequests;
@@ -33,10 +37,11 @@ export class VerificationController {
     }
 
     @Put('/verifications')
-    public async update(@Body() dto: Verification) {
+    @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
+    public async update(@Body() dto: Verification, @Request() request) {
       const verification = new Verification();
       verification.id = dto.id;
-      verification.lastChangedBy = dto.lastChangedBy;
+      verification.lastChangedBy = request.user.sub;
       verification.name = dto.name;
       verification.organizationId = dto.organizationId;
       verification.credentialRequests = dto.credentialRequests;
@@ -45,8 +50,9 @@ export class VerificationController {
     }
 
     @Delete('/verifications/:id')
-    public async delete(@Param('id') id) {
-      return await this.service.delete(id);
+    @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
+    public async delete(@Param('id') id, @Request() request) {
+      return await this.service.delete(id, request.user.sub);
     }
   
 }

@@ -7,12 +7,12 @@ import { Repository } from 'typeorm';
 export class VerificationService {
     constructor(@InjectRepository(Verification) private readonly repository: Repository<Verification>) { }
 
-    public async getAll(id: string) {
-      return await this.repository.find({where: {organizationId: id}});
+    public async getAll(organizationId: string, createdBy: string) {
+      return await this.repository.find({where: {organizationId: organizationId, createdBy: createdBy}});
     }
 
-    public async get(id: string) {
-      return await this.repository.findOne({where: {id: id}});
+    public async get(id: string, createdBy: string) {
+      return await this.repository.findOne({where: {id: id, createdBy: createdBy}});
     }
 
     public async create(verification: Verification): Promise<Verification> {
@@ -23,7 +23,9 @@ export class VerificationService {
       return await this.repository.save(verification);
     }
 
-    public async delete(id: string): Promise<void> {
+    public async delete(id: string, createdBy: string): Promise<void> {
+      const verification = await this.repository.findOne({where: {id: id, createdBy: createdBy}});
+      if (!verification) return;
       await this.repository.delete(id);
     }
 }

@@ -2,10 +2,7 @@ import { Body, Controller, Request, Delete, Get, Param, Post, Put } from '@nestj
 import { Organization } from 'src/model/organization.entity';
 import { OrganizationService } from './organization.service';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  Roles,
-  RoleMatchingMode
-} from 'nest-keycloak-connect';
+import { Roles, RoleMatchingMode } from 'nest-keycloak-connect';
 
 @Controller('/api/v1')
 export class OrganizationController {
@@ -16,22 +13,22 @@ export class OrganizationController {
     @Get('/organizations')
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
     public async getAll(@Request() request) {
-      return await this.service.getAll();
+      return await this.service.getAll(request.user.sub);
     }
 
     @Get('/organizations/:id')
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async get(@Param('id') id) {
-      return await this.service.get(id);
+    public async get(@Param('id') id, @Request() request) {
+      return await this.service.get(id, request.user.sub);
     }
 
     @Post('/organizations')
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async create(@Body() dto: Organization) {
+    public async create(@Body() dto: Organization, @Request() request) {
       const organization = new Organization();
       organization.id = uuidv4();
-      organization.createdBy = 'me';
-      organization.lastChangedBy = 'me';
+      organization.createdBy = request.user.sub;
+      organization.lastChangedBy = request.user.sub;
       organization.name = dto.name;
       organization.description = dto.description;
       return await this.service.create(organization);
@@ -39,10 +36,10 @@ export class OrganizationController {
 
     @Put('/organizations')
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async update(@Body() dto: Organization) {
+    public async update(@Body() dto: Organization, @Request() request) {
       const organization = new Organization();
       organization.id = dto.id;
-      organization.lastChangedBy = dto.lastChangedBy;
+      organization.lastChangedBy = request.user.sub;
       organization.name = dto.name;
       organization.description = dto.description;
       return await this.service.update(organization);
@@ -50,8 +47,8 @@ export class OrganizationController {
 
     @Delete('/organizations/:id')
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async delete(@Param('id') id) {
-      return await this.service.delete(id);
+    public async delete(@Param('id') id, @Request() request) {
+      return await this.service.delete(id, request.user.sub);
     }
   
 }
