@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { CredentialTemplate } from '../models/credential-template';
+import { Routes } from '../routes';
 
 @Injectable()
 export class CredentialTemplateService {
@@ -12,8 +13,8 @@ export class CredentialTemplateService {
   constructor(private http: HttpClient) {
   }
 
-  getAllByOrganization(organizationId: string): Observable<CredentialTemplate[]> {
-    return this.http.get<any[]>(this.apiUrl + '/organizations/' + organizationId + '/credentials').pipe(map((dtos:any[]) => {
+  getAllByLaboratory(laboratoryId: string): Observable<CredentialTemplate[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${Routes.LABORATORY}/${laboratoryId}/${Routes.CREDENTIAL}`).pipe(map((dtos:any[]) => {
         const templates: CredentialTemplate[] = [];
         for (const dto of dtos) {
           templates.push(CredentialTemplate.fromDto(dto));
@@ -23,14 +24,14 @@ export class CredentialTemplateService {
   }
 
   get(id: string): Observable<CredentialTemplate> {
-    return this.http.get<any>(this.apiUrl + '/credentials/' + id).pipe(map((dto: any) => {
+    return this.http.get<any>(`${this.apiUrl}/${Routes.CREDENTIAL}/${id}`).pipe(map((dto: any) => {
         return CredentialTemplate.fromDto(dto);
       }));
   }
 
   create(template: CredentialTemplate): Observable<CredentialTemplate> {
     let subject = new Subject<CredentialTemplate>();
-    this.http.post<any>(`${this.apiUrl}/credentials`, template).subscribe(
+    this.http.post<any>(`${this.apiUrl}/${Routes.CREDENTIAL}`, template).subscribe(
       { 
         next: (dto) => {
             subject.next(CredentialTemplate.fromDto(dto));
@@ -45,7 +46,7 @@ export class CredentialTemplateService {
 
   update(template: CredentialTemplate): Observable<CredentialTemplate> {
     let subject = new Subject<CredentialTemplate>();
-    this.http.put<any>(`${this.apiUrl}/credentials`, template).subscribe(
+    this.http.put<any>(`${this.apiUrl}/${Routes.CREDENTIAL}`, template).subscribe(
       { 
         next: (dto) => {
             subject.next(CredentialTemplate.fromDto(dto));
@@ -60,7 +61,7 @@ export class CredentialTemplateService {
 
   delete(template: CredentialTemplate): Observable<void> {
     let subject = new Subject<void>();
-    this.http.delete(this.apiUrl + '/credentials/' + template.id).subscribe(
+    this.http.delete(`${this.apiUrl}/${Routes.CREDENTIAL}/${template.id}`).subscribe(
       { 
         next: () => {
             subject.next();

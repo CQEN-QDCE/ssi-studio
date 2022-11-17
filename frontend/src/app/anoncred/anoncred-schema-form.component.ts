@@ -95,9 +95,9 @@ export class AnonCredSchemaFormComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnInit(): void {
     this.route.parent?.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-    let organizationId = params.get('id');
-    if (organizationId) {
-      this.agentTemplateService.getAllByOrganization(organizationId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplates => {
+    let laboratoryId = params.get('id');
+    if (laboratoryId) {
+      this.agentTemplateService.getAllByLaboratory(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplates => {
         this.agentTemplates = agentTemplates;
         this.resetControls();
       });

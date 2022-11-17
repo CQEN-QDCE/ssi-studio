@@ -7,9 +7,9 @@ import { OcaService } from './oca.service';
 import { configService } from './config.service';
 import { OcaSchemaController } from './oca-schema/oca-schema.controller';
 import { OcaSchemaService } from './oca-schema/oca-schema.service';
-import { OrganizationService } from './organization/organization.service';
-import { OrganizationController } from './organization/organization.controller';
-import { Organization } from './model/organization.entity';
+import { LaboratoryService } from './laboratory/laboratory.service';
+import { LaboratoryController } from './laboratory/laboratory.controller';
+import { Laboratory } from './model/laboratory.entity';
 import { CredentialController } from './credential/credential.controller';
 import { CredentialService } from './credential/credential.service';
 import { VerificationService } from './verification/verification.service';
@@ -51,7 +51,7 @@ import { APP_GUARD } from '@nestjs/core';
       tokenValidation: TokenValidation.OFFLINE,
     }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-    TypeOrmModule.forFeature([Organization]),
+    TypeOrmModule.forFeature([Laboratory]),
     TypeOrmModule.forFeature([Connection]),
     TypeOrmModule.forFeature([Credential]),
     TypeOrmModule.forFeature([Verification]),
@@ -63,7 +63,7 @@ import { APP_GUARD } from '@nestjs/core';
     AppController, 
     OcaController, 
     OcaSchemaController, 
-    OrganizationController, 
+    LaboratoryController, 
     CredentialController, 
     VerificationController, 
     ConnectionController, 
@@ -74,7 +74,7 @@ import { APP_GUARD } from '@nestjs/core';
     AppService, 
     OcaService, 
     OcaSchemaService, 
-    OrganizationService, 
+    LaboratoryService, 
     CredentialService, 
     VerificationService, 
     ConnectionService, 

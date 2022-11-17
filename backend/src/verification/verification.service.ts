@@ -7,8 +7,8 @@ import { Repository } from 'typeorm';
 export class VerificationService {
     constructor(@InjectRepository(Verification) private readonly repository: Repository<Verification>) { }
 
-    public async getAll(organizationId: string, createdBy: string) {
-      return await this.repository.find({where: {organizationId: organizationId, createdBy: createdBy}});
+    public async getAll(laboratoryId: string, createdBy: string) {
+      return await this.repository.find({where: {laboratoryId: laboratoryId, createdBy: createdBy}});
     }
 
     public async get(id: string, createdBy: string) {

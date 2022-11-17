@@ -54,9 +54,9 @@ export class VerificationTemplateEditorComponent implements OnInit, OnDestroy, A
     private initAgentTemplates(): void {
       if (this.agentTemplatesInit) return;
       this.route.parent?.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-        let organizationId = params.get('id');
-        if (organizationId) {
-          this.agentTemplateService.getAllByOrganization(organizationId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplates => {
+        let laboratoryId = params.get('id');
+        if (laboratoryId) {
+          this.agentTemplateService.getAllByLaboratory(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplates => {
             this.agentTemplates = agentTemplates;
             this.agentTemplatesInit = true;
             this.initCurrentAgentTemplate();
