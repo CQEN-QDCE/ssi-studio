@@ -52,7 +52,7 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
   
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  private organizationId: string | null = null;
+  private laboratoryId: string | null = null;
 
   @ViewChild('ocaEditor') ocaEditor: OcaEditorComponent | null = null;
 
@@ -73,10 +73,10 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.route.parent?.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      let organizationId = params.get('id');
-      if (organizationId) {
-        this.credentialTemplateService.getAllByOrganization(organizationId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(credentialTemplates => {
-          this.organizationId = organizationId;
+      let laboratoryId = params.get('id');
+      if (laboratoryId) {
+        this.credentialTemplateService.getAllByLaboratory(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(credentialTemplates => {
+          this.laboratoryId = laboratoryId;
           this.credentialTemplates = credentialTemplates;
         });
       }
@@ -95,7 +95,7 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
 
   addCredentialTemplate(): void {
     this.credentialTemplate = new CredentialTemplate();
-    this.credentialTemplate.organizationId = this.organizationId || '';
+    this.credentialTemplate.laboratoryId = this.laboratoryId || '';
     this.credentialTemplate.credentialDefinition = new CredentialDefinition();
     this.confirmLabel = this.translate.instant('CreateLabel');
     this.credentialTemplateDialogVisible = true;
@@ -103,7 +103,7 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
 
   addOCACredentialTemplate(): void {
     this.credentialTemplate = new CredentialTemplate();
-    this.credentialTemplate.organizationId = this.organizationId || '';
+    this.credentialTemplate.laboratoryId = this.laboratoryId || '';
     this.ocaCredentialTemplateDialogVisible = true;
   }
  

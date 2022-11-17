@@ -29,7 +29,6 @@ export class ConnectionService {
     return subject.asObservable();
   }
 
-  // Query agent-to-agent connections
   search(query: ConnectionQuery = new ConnectionQuery()): Observable<Connection[]> {
     let params: any[] = [];
     if (query) {

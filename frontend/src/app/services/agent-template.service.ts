@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { AgentTemplate } from '../models/agent-template';
+import { Routes } from '../routes';
 
 @Injectable()
 export class AgentTemplateService {
@@ -12,8 +13,8 @@ export class AgentTemplateService {
   constructor(private http: HttpClient) {
   }
 
-  getAllByOrganization(organizationId: string): Observable<AgentTemplate[]> {
-    return this.http.get<any[]>(this.apiUrl + '/organizations/' + organizationId + '/agents').pipe(map((dtos:any[]) => {
+  getAllByLaboratory(laboratoryId: string): Observable<AgentTemplate[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${Routes.LABORATORY}/${laboratoryId}/${Routes.AGENT}`).pipe(map((dtos:any[]) => {
         const agentTemplates: AgentTemplate[] = [];
         dtos.forEach( (dto) => {
           agentTemplates.push(AgentTemplate.fromDto(dto));
@@ -23,14 +24,14 @@ export class AgentTemplateService {
   }
 
   get(id: string): Observable<AgentTemplate> {
-    return this.http.get<any>(this.apiUrl + '/agents/' + id).pipe(map((dto: any) => {
+    return this.http.get<any>(`${this.apiUrl}/${Routes.AGENT}/${id}`).pipe(map((dto: any) => {
       return AgentTemplate.fromDto(dto);
     }));
   }
 
   create(agentTemplate: AgentTemplate): Observable<AgentTemplate> {
     const subject = new Subject<AgentTemplate>();
-    this.http.post<any>(`${this.apiUrl}/agents`, agentTemplate).subscribe(
+    this.http.post<any>(`${this.apiUrl}/${Routes.AGENT}`, agentTemplate).subscribe(
         { 
             next: (dto) => {
                 subject.next(AgentTemplate.fromDto(dto));
@@ -45,7 +46,7 @@ export class AgentTemplateService {
 
   update(agentTemplate: AgentTemplate): Observable<AgentTemplate> {
     const subject = new Subject<AgentTemplate>();
-    this.http.put<any>(`${this.apiUrl}/agents`, agentTemplate).subscribe(
+    this.http.put<any>(`${this.apiUrl}/${Routes.AGENT}`, agentTemplate).subscribe(
         { 
             next: (dto) => {
                 subject.next(AgentTemplate.fromDto(dto));
@@ -60,7 +61,7 @@ export class AgentTemplateService {
 
   delete(agentTemplate: AgentTemplate): Observable<void> {
     const subject = new Subject<void>();
-    this.http.delete(this.apiUrl + '/agents/' + agentTemplate.id).subscribe(
+    this.http.delete(`${this.apiUrl}/${Routes.AGENT}/${agentTemplate.id}`).subscribe(
         { 
             next: () => {
                 subject.next();

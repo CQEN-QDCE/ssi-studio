@@ -48,9 +48,9 @@ import { OcaMenubarComponent } from './oca/components/oca-menubar.component';
 import { OcaEditorComponent } from './oca/components/oca-editor.component';
 import { OcaAttributeEditorComponent } from './oca/components/oca-attribute-editor.component';
 import { DropDisableDirective } from './drop-disable.directive';
-import { OrganizationService } from './services/organization.service';
-import { OrganizationsViewComponent } from './organization/organizations-view.component';
-import { OrganizationComponent } from './organization/organization.component';
+import { LaboratoryService } from './services/laboratory.service';
+import { LaboratoriesViewComponent } from './laboratory/laboratories-view.component';
+import { LaboratoryComponent } from './laboratory/laboratory.component';
 import { HomeComponent } from './dashboard/home.component';
 import { ConnectionsComponent } from './connection/connections.component';
 import { CredentialTemplateService } from './services/credential-template.service';
@@ -94,7 +94,7 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     AgentConfigComponent,
     SchemaEditorComponent,
     OcaEditorComponent,
-    OrganizationsViewComponent,
+    LaboratoriesViewComponent,
     VerificationRequestComponent,
     RequestVerificationComponent,
     HomeComponent,
@@ -105,7 +105,7 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     VerificationTemplateComponent,
     VerificationTemplateViewComponent,
     VerificationTemplateEditorComponent,
-    OrganizationComponent,
+    LaboratoryComponent,
     AnonCredSchemaEditorComponent,
     AnonCredSchemaFormComponent,
     AnonCredCredentialDefinitionEditorComponent,
@@ -163,7 +163,7 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     CredentialTemplateService,
     VerificationTemplateService,
     AgentTemplateService,
-    OrganizationService,
+    LaboratoryService,
     SchemaService,
     ServerService,
     PresentProofService,

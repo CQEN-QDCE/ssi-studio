@@ -33,7 +33,7 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
-  private organizationId: string | null = null;
+  private laboratoryId: string | null = null;
    
   constructor(private readonly route: ActivatedRoute, 
               private readonly confirmationService: ConfirmationService,
@@ -43,10 +43,10 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.route.parent?.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-      let organizationId = params.get('id');
-      if (organizationId) {
-        this.agentTemplateService.getAllByOrganization(organizationId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplates => {
-          this.organizationId = organizationId;
+      let laboratoryId = params.get('id');
+      if (laboratoryId) {
+        this.agentTemplateService.getAllByLaboratory(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplates => {
+          this.laboratoryId = laboratoryId;
           this.agentTemplates = agentTemplates;
         });
       }
@@ -61,7 +61,7 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
 
   createTemplate(): void {
     this.agentTemplate = new AgentTemplate();
-    this.agentTemplate.organizationId = this.organizationId || '';
+    this.agentTemplate.laboratoryId = this.laboratoryId || '';
     this.confirmLabel = this.translate.instant('CreateLabel');
     this.agentTemplateDialogVisible = true;
   }

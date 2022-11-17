@@ -3,34 +3,35 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
-import { Organization } from '../models/organization';
-import { OrganizationService } from '../services/organization.service';
+import { Laboratory } from '../models/laboratory';
+import { Routes } from '../routes';
+import { LaboratoryService } from '../services/laboratory.service';
 
 @Component({
-  selector: 'organization',
-  templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.css']
+  selector: 'laboratory',
+  templateUrl: './laboratory.component.html',
+  styleUrls: ['./laboratory.component.css']
 })
-export class OrganizationComponent implements OnInit, OnDestroy {
+export class LaboratoryComponent implements OnInit, OnDestroy {
 
     items: MenuItem[] = [];
 
-    organization: Organization = new Organization();
+    laboratory: Laboratory = new Laboratory();
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
   
     constructor(private readonly route: ActivatedRoute, 
                 private readonly router: Router,
-                private readonly organizationService: OrganizationService,
+                private readonly laboratoryService: LaboratoryService,
                 private readonly translate: TranslateService) {
     }
 
     async ngOnInit(): Promise<void> {
         this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-            let organizationId = params.get('id');
-            if (organizationId) {
-                this.organizationService.get(organizationId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(organization => {
-                    this.organization = organization;
+            let laboratoryId = params.get('id');
+            if (laboratoryId) {
+                this.laboratoryService.get(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(laboratory => {
+                    this.laboratory = laboratory;
                 });
             }
         });
@@ -82,19 +83,20 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     }
     
     navigateToConnections(): void {
-        this.router.navigateByUrl('/organizations/' + this.organization.id + '/connections');
+        this.router.navigateByUrl(`/${Routes.LABORATORY}/${this.laboratory.id}/${Routes.CONNECTION}`);
     }
     
     navigateToCredentials(): void {
-        this.router.navigateByUrl('/organizations/' + this.organization.id + '/credentials');
+        this.router.navigateByUrl(`/${Routes.LABORATORY}/${this.laboratory.id}/${Routes.CREDENTIAL}`);
     }
 
     navigateToVerifications(): void {
-        this.router.navigateByUrl('/organizations/' + this.organization.id + '/verifications');
+        this.router.navigateByUrl(`/${Routes.LABORATORY}/${this.laboratory.id}/${Routes.VERIFICATION}`);
     }
 
     navigateToAgents(): void {
-        this.router.navigateByUrl('/organizations/' + this.organization.id + '/agents');
+        this.router.navigateByUrl(`/${Routes.LABORATORY}/${this.laboratory.id}/${Routes.AGENT}`);
     }
 }
+
 

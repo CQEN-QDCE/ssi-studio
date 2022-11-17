@@ -8,5 +8,5 @@ export class Connection extends BaseEntity {
   name: string;
 
   @Column({ type: 'varchar', length: 300 })
-  organizationId: string;
+  laboratoryId: string;
 }

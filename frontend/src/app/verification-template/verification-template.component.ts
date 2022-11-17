@@ -38,7 +38,7 @@ export class VerificationTemplateComponent implements OnInit, OnDestroy {
 
     agentTemplate: AgentTemplate = new AgentTemplate();
 
-    private organizationId: string | null = null;
+    private laboratoryId: string | null = null;
 
     private ngUnsubscribe: Subject<void> = new Subject<void>();
     
@@ -51,10 +51,10 @@ export class VerificationTemplateComponent implements OnInit, OnDestroy {
 
     async ngOnInit(): Promise<void> {
       this.route.parent?.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-        let organizationId = params.get('id');
-        if (organizationId) {
-            this.verificationTemplateService.getAllByOrganization(organizationId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(verificationTemplates => {
-              this.organizationId = organizationId;
+        let laboratoryId = params.get('id');
+        if (laboratoryId) {
+            this.verificationTemplateService.getAllByLaboratory(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(verificationTemplates => {
+              this.laboratoryId = laboratoryId;
               this.verificationTemplates = verificationTemplates;
             });
         }
@@ -70,7 +70,7 @@ export class VerificationTemplateComponent implements OnInit, OnDestroy {
     create(): void {
       this.saveLabel = this.translate.instant('CreateLabel');
       this.verificationTemplate = new VerificationTemplate();
-      this.verificationTemplate.organizationId = this.organizationId || '';
+      this.verificationTemplate.laboratoryId = this.laboratoryId || '';
       this.verificationTemplateDialogVisible = true;
     }
 

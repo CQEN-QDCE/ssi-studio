@@ -1,7 +1,7 @@
 <div class="workspace-title">{{'WorkspacesTitle' | translate }}</div>
-<p-button icon="fa fa-plus" (click)="addOrganization()" label="{{'AddLabel' | translate }}"></p-button>
-<p-dataView [value]="organizations">
-    <ng-template let-organization let-index="rowIndex" pTemplate="listItem">
+<p-button icon="fa fa-plus" (click)="addLaboratory()" label="{{'AddLabel' | translate }}"></p-button>
+<p-dataView [value]="laboratories">
+    <ng-template let-laboratory let-index="rowIndex" pTemplate="listItem">
         <div class="workspace-list-item" (click)="select(index)">
             <div style="width: 30%; margin: 10px">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 297" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 297 297">
@@ -13,27 +13,27 @@
                 </g>
               </svg>
             </div>
-            <div class="workspace-name">{{organization.name}}</div>
-            <div class="workspace-description">{{organization.description}}</div>
+            <div class="workspace-name">{{laboratory.name}}</div>
+            <div class="workspace-description">{{laboratory.description}}</div>
             <button pButton pRipple type="button" icon="fa fa-arrow-right" class="p-button-rounded p-button-text" (click)="select(index)"></button>
             <button pButton pRipple type="button" icon="fa fa-edit" class="p-button-rounded p-button-text" (click)="$event.preventDefault(); $event.stopPropagation(); edit(index)"></button>
             <button pButton pRipple type="button" icon="fa fa-trash" class="p-button-rounded p-button-text" (click)="$event.preventDefault(); $event.stopPropagation(); delete(index)"></button>
         </div>
     </ng-template>
 </p-dataView>
-<p-dialog header="{{'WorkspaceTitle' | translate }}" [(visible)]="organizationDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
-    <div *ngIf="organizationDialogVisible">
+<p-dialog header="{{'WorkspaceTitle' | translate }}" [(visible)]="laboratoryDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
+    <div *ngIf="laboratoryDialogVisible">
         <div class="grid">
             <div class="col-12">
                 <label for="name">{{'NameLabel' | translate }}</label>
                 <div class="ui-inputgroup">
-                  <input id="id" type="text" pInputText [(ngModel)]="organization.name" ngModel #id="ngModel" [style]="{'width':'100%'}">
+                  <input id="id" type="text" pInputText [(ngModel)]="laboratory.name" ngModel #id="ngModel" [style]="{'width':'100%'}">
                 </div>
             </div>
             <div class="col-12">
                 <label for="name">{{'DescriptionLabel' | translate }}</label>
                 <div class="ui-inputgroup">
-                  <input id="id" type="text" pInputText [(ngModel)]="organization.description" ngModel #id="ngModel" [style]="{'width':'100%'}">
+                  <input id="id" type="text" pInputText [(ngModel)]="laboratory.description" ngModel #id="ngModel" [style]="{'width':'100%'}">
                 </div>
             </div>
         </div>
