@@ -56,9 +56,8 @@ import { ConnectionsComponent } from './connection/connections.component';
 import { CredentialTemplateService } from './services/credential-template.service';
 import { VerificationTemplateService } from './services/verification-template.service';
 import { CredentialTemplateComponent } from './credential-template/credential-template.component';
-import { VerificationTemplateComponent } from './verification-template/verification-template.component';
-import { VerificationTemplateViewComponent } from './verification-template/verification-template-view.component';
-import { VerificationTemplateEditorComponent } from './verification-template/verification-template-editor.component';
+import { VerificationTemplateListComponent } from './verification-template/verification-template-list.component';
+import { VerificationTemplateFormComponent } from './verification-template/verification-template-form.component';
 import { CredentialTemplateViewComponent } from './credential-template/credential-template-view.component';
 import { ConfirmationService } from 'primeng/api';
 import { PresentProofService } from './services/present-proof.service';
@@ -102,9 +101,8 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     ErrorDialogComponent,
     CredentialTemplateComponent,
     CredentialTemplateViewComponent,
-    VerificationTemplateComponent,
-    VerificationTemplateViewComponent,
-    VerificationTemplateEditorComponent,
+    VerificationTemplateListComponent,
+    VerificationTemplateFormComponent,
     LaboratoryComponent,
     AnonCredSchemaEditorComponent,
     AnonCredSchemaFormComponent,
