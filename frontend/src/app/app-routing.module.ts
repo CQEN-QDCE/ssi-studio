@@ -5,16 +5,16 @@ import { ConnectionsComponent } from './connection/connections.component';
 import { HomeComponent } from './dashboard/home.component';
 import { LaboratoryComponent } from './laboratory/laboratory.component';
 import { VerificationTemplateComponent } from './verification-template/verification-template.component';
-import { AgentTemplateComponent } from './agent-template/agent-template.component';
-import { AuthGuard } from './auth/auth.guard';
+import { AgentTemplateComponent } from './agent-template/agent-template-list.component';
+import { AuthenticationGuard } from './authentication/authentication.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'laboratories/:id', component: LaboratoryComponent, canActivate: [AuthGuard], children: [
-    { path: 'connections', component: ConnectionsComponent, canActivate: [AuthGuard] },
-    { path: 'credentials', component: CredentialTemplateComponent, canActivate: [AuthGuard] },
-    { path: 'verifications', component: VerificationTemplateComponent, canActivate: [AuthGuard] },
-    { path: 'agents', component: AgentTemplateComponent, canActivate: [AuthGuard] }
+  { path: '', component: HomeComponent, canActivate: [AuthenticationGuard] },
+  { path: 'laboratories/:id', component: LaboratoryComponent, canActivate: [AuthenticationGuard], children: [
+    { path: 'connections', component: ConnectionsComponent, canActivate: [AuthenticationGuard] },
+    { path: 'credentials', component: CredentialTemplateComponent, canActivate: [AuthenticationGuard] },
+    { path: 'verifications', component: VerificationTemplateComponent, canActivate: [AuthenticationGuard] },
+    { path: 'agents', component: AgentTemplateComponent, canActivate: [AuthenticationGuard] }
   ]}
 ];
 

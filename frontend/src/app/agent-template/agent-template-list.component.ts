@@ -6,12 +6,12 @@ import { ConfirmationService } from 'primeng/api';
 import { AgentTemplate } from '../models/agent-template';
 import { AgentTemplateService } from '../services/agent-template.service';
 import { TranslateService } from '@ngx-translate/core';
-import { AgentComponent } from './agent.component';
+import { AgentComponent } from './agent-template-form.component';
 
 @Component({
-  selector: 'agent-template',
-  templateUrl: './agent-template.component.html',
-  styleUrls: ['./agent-template.component.css']
+  selector: 'agent-template-list',
+  templateUrl: './agent-template-list.component.html',
+  styleUrls: ['./agent-template-list.component.css']
 })
 export class AgentTemplateComponent implements OnInit, OnDestroy {
 
