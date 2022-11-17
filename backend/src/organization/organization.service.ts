@@ -7,12 +7,12 @@ import { Repository } from 'typeorm';
 export class OrganizationService {
     constructor(@InjectRepository(Organization) private readonly repository: Repository<Organization>) { }
 
-    public async getAll() {
-      return await this.repository.find();
+    public async getAll(createdBy: string) {
+      return await this.repository.find({where: {createdBy: createdBy}});
     }
 
-    public async get(id: string) {
-      return await this.repository.findOne({where: {id: id}});
+    public async get(id: string, createdBy: string) {
+      return await this.repository.findOne({where: {id: id, createdBy: createdBy}});
     }
 
     public async create(organization: Organization): Promise<Organization> {
@@ -23,7 +23,9 @@ export class OrganizationService {
       return await this.repository.save(organization);
     }
 
-    public async delete(id: string): Promise<void> {
+    public async delete(id: string, createdBy: string): Promise<void> {
+      const organisation = await this.repository.findOne({where: {id: id, createdBy: createdBy}});
+      if (!organisation) return;
       await this.repository.delete(id);
     }
 }

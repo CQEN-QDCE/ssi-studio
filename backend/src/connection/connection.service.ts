@@ -7,12 +7,12 @@ import { Repository } from 'typeorm';
 export class ConnectionService {
     constructor(@InjectRepository(Connection) private readonly repository: Repository<Connection>) { }
 
-    public async getAll(id: string) {
-      return await this.repository.find({where: {organizationId: id}});
+    public async getAll(organizationId: string, createdBy: string) {
+      return await this.repository.find({where: {organizationId: organizationId, createdBy: createdBy}});
     }
 
-    public async get(id: string) {
-      return await this.repository.findOne({where: {id: id}});
+    public async get(id: string, createdBy: string) {
+      return await this.repository.findOne({where: {id: id, createdBy: createdBy}});
     }
 
     public async create(connection: Connection): Promise<Connection> {
@@ -23,7 +23,9 @@ export class ConnectionService {
       return await this.repository.save(connection);
     }
 
-    public async delete(id: string): Promise<void> {
+    public async delete(id: string, createdBy: string): Promise<void> {
+      const connection = await this.repository.findOne({where: {id: id, createdBy: createdBy}});
+      if (!connection) return;
       await this.repository.delete(id);
     }
 }
