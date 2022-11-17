@@ -9,16 +9,16 @@ import { AgentTemplateService } from '../services/agent-template.service';
 
 export const verificationTemplateEditorValueAccessor: any = {
   provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => VerificationTemplateEditorComponent),
+  useExisting: forwardRef(() => VerificationTemplateFormComponent),
   multi: true
 };
 @Component({
-  selector: 'verification-template-editor',
-  templateUrl: './verification-template-editor.component.html',
-  styleUrls: ['./verification-template-editor.component.css'],
+  selector: 'verification-template-form',
+  templateUrl: './verification-template-form.component.html',
+  styleUrls: ['./verification-template-form.component.css'],
   providers: [verificationTemplateEditorValueAccessor]
 })
-export class VerificationTemplateEditorComponent implements OnInit, OnDestroy, AfterViewInit {
+export class VerificationTemplateFormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     verificationTemplate: VerificationTemplate = new VerificationTemplate();
 

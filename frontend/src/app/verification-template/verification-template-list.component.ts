@@ -11,14 +11,14 @@ import { RequestedPredicate } from '../models/requested-predicate';
 import { AgentTemplate } from '../models/agent-template';
 import { AgentTemplateService } from '../services/agent-template.service';
 import { TranslateService } from '@ngx-translate/core';
-import { VerificationTemplateEditorComponent } from './verification-template-editor.component';
+import { VerificationTemplateFormComponent } from './verification-template-form.component';
 
 @Component({
-  selector: 'verification-template',
-  templateUrl: './verification-template.component.html',
-  styleUrls: ['./verification-template.component.css']
+  selector: 'verification-template-list',
+  templateUrl: './verification-template-list.component.html',
+  styleUrls: ['./verification-template-list.component.css']
 })
-export class VerificationTemplateComponent implements OnInit, OnDestroy {
+export class VerificationTemplateListComponent implements OnInit, OnDestroy {
 
     verificationTemplates: VerificationTemplate[] = [];
 
@@ -28,7 +28,7 @@ export class VerificationTemplateComponent implements OnInit, OnDestroy {
 
     saveLabel: string = 'dfvdv';
 
-    @ViewChild('editor') editor: VerificationTemplateEditorComponent | null = null;
+    @ViewChild('editor') editor: VerificationTemplateFormComponent | null = null;
 
     verificationTemplateDialogVisible: boolean = false;
 
