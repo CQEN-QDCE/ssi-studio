@@ -12,9 +12,9 @@ export const agentTemplateEditorValueAccessor: any = {
   multi: true
 };
 @Component({
-  selector: 'agent',
-  templateUrl: './agent.component.html',
-  styleUrls: ['./agent.component.css'],
+  selector: 'agent-template-form',
+  templateUrl: './agent-template-form.component.html',
+  styleUrls: ['./agent-template-form.component.css'],
   providers: [agentTemplateEditorValueAccessor]
 })
 export class AgentComponent implements OnInit, OnDestroy {
