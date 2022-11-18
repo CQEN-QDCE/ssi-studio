@@ -1,6 +1,6 @@
 # Déploiement SSI Studio sur OpenShift
 
-Ce dépôt contient les instructions nécessaires pour déployer SSI Lab sur OpenShift.
+Ce dépôt contient les instructions nécessaires pour déployer SSI Studio sur OpenShift.
 
 | Gabarit  | Descripton |
 | -------- | ---------- |
