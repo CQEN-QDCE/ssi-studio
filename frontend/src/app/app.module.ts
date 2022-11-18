@@ -26,6 +26,7 @@ import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
 import { DragDropModule } from 'primeng/dragdrop';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 import { OrderListModule } from 'primeng/orderlist';
 import { IssuerService } from './services/issuer.service';
 import { Poller } from './services/poller.service';
@@ -49,7 +50,7 @@ import { OcaEditorComponent } from './oca/components/oca-editor.component';
 import { OcaAttributeEditorComponent } from './oca/components/oca-attribute-editor.component';
 import { DropDisableDirective } from './drop-disable.directive';
 import { LaboratoryService } from './services/laboratory.service';
-import { LaboratoriesViewComponent } from './laboratory/laboratories-view.component';
+import { LaboratoryListComponent } from './laboratory/laboratory-list.component';
 import { LaboratoryComponent } from './laboratory/laboratory.component';
 import { HomeComponent } from './dashboard/home.component';
 import { ConnectionsComponent } from './connection/connections.component';
@@ -93,7 +94,7 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     AgentConfigComponent,
     SchemaEditorComponent,
     OcaEditorComponent,
-    LaboratoriesViewComponent,
+    LaboratoryListComponent,
     VerificationRequestComponent,
     RequestVerificationComponent,
     HomeComponent,
@@ -137,6 +138,7 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     MultiSelectModule,
     ReactiveFormsModule,
     InputTextModule,
+    OverlayPanelModule,
     SelectButtonModule,
     AccordionModule,
     TooltipModule,

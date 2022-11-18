@@ -8,11 +8,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Routes } from '../routes';
 
 @Component({
-  selector: 'laboratories-view',
-  templateUrl: './laboratories-view.component.html',
-  styleUrls: ['./laboratories-view.component.css']
+  selector: 'laboratory-list',
+  templateUrl: './laboratory-list.component.html',
+  styleUrls: ['./laboratory-list.component.css']
 })
-export class LaboratoriesViewComponent implements OnInit, OnDestroy {
+export class LaboratoryListComponent implements OnInit, OnDestroy {
 
     laboratories: Laboratory[] = [];
 
