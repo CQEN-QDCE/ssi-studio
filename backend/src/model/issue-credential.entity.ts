@@ -11,6 +11,9 @@ export class IssueCredential extends BaseEntity {
   credentialPreview: any;
 
   @Column('boolean', { default: false })
+  revocable: boolean = false;
+
+  @Column('boolean', { default: false })
   revoked: boolean = false;
 
   @Column({ type: 'varchar', nullable: false })

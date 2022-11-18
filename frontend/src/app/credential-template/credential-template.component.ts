@@ -49,6 +49,8 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
   agentTemplate: AgentTemplate = new AgentTemplate();
 
   credentialDefinition: CredentialDefinition | null = null;
+
+  revocable: boolean = false;
   
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -221,6 +223,7 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
   offerCredential(index: number): void {
     this.credentialTemplate = this.credentialTemplates[index];
     this.credentialDefinition = this.credentialTemplate.credentialDefinition;
+    this.revocable = this.credentialTemplate.revocable;
     this.offerLinkVisible = false;
     this.agentTemplateService.get(this.credentialTemplate.agentTemplateId).pipe(takeUntil(this.ngUnsubscribe)).subscribe((agentTemplate) => {
       this.agentTemplate = agentTemplate;
