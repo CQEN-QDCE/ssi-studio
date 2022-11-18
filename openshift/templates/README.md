@@ -14,7 +14,7 @@ Tous les paramètres du gabarit sont obligatoires. La plupart d'entre eux ont de
 
 | Paramètre | Description |
 | --------- | ----------- |
-| **ROUTE_HOSTNAME** | Le nom d'hôte externe pour accéder à SSI Lab |
+| **APP_DOMAIN** | Le nom d'hôte externe pour accéder à l'application |
 
 
 Commencer par créer un projet sur OpenShift:
@@ -23,19 +23,34 @@ oc new-project ssi-studio
 ```
 Lancez l'installation sur OpenShift
 ```bash
-oc create configmap default.conf --from-file=nginx.conf
-
-oc process -f ssi-studio.yaml -p ROUTE_HOSTNAME=<nom d'hôte externe> | oc apply -f -
+oc process -f ./ssi-studio.yaml --param-file=./ssi-studio.dev.params | oc apply -f -
 ```
 
-Remplacez _&lt;nom d'hôte externe&gt;_ par une valeur qui se résout à l'adresse du routeur OpenShift.
-
-Une fois que tous les pods sont démarrés, vous devriez pouvoir accéder à SSI Studio à l'adresse https://ssi-studio.<nom d'hôte externe>/.
+Une fois que tous les pods sont démarrés, vous pouvez accéder à l'application à l'adresse https://ssi-studio.<nom d'hôte externe>/.
 
 Paramètres avec valeurs par défaut
 | Paramètre | Description | Défaut      |
 | --------- | ----------- | ----------- |
-| **ROUTE_SUBDOMAIN** | Le nom de sous domaine pour accéder à SSI Lab. | ssi-studio |
-| **POSTGRES_DB** | Nom de la base de données PostgreSQL. | ssi_lab |
-| **POSTGRES_USER** | Nom d'utilisateur PostgreSQL. | dbuser |
-| **POSTGRES_PASSWORD** | Mot de passe de l'utilisateur PostgreSQL. | {auto-généré} |
+| **APP_NAME** | Nom utilisé pourregrouper les composantes ensembles dans la console OpenShift. | ssi-studio |
+| **APP_DOMAIN** | Le nom de domaine externe pour accéder à l'application. | |
+| **APP_SUBDOMAIN** | Le nom de sous domaine pour accéder à l'application. | ssi-studio |
+| **KEYCLOAK_SUBDOMAIN** | Le nom de sous domaine pour accéder à Keycloak. | ssi-studio-keycloak |
+| **POSTGRESQL_USERNAME** | Nom d'utilisateur PostgreSQL. | dbuser |
+| **POSTGRESQL_PASSWORD** | Mot de passe de l'utilisateur PostgreSQL. | {auto-généré} |
+| **POSTGRESQL_ADMIN_USERNAME** | Nom d'utilisateur de l'administrateur PostgreSQL. | postgres |
+| **POSTGRESQL_ADMIN_PASSWORD** | Mot de passe de l'utilisateur administrateur PostgreSQL. | {auto-généré} |
+| **POSTGRESQL_DATABASE_NAME** | Nom de la base de données de l'application. | ssi-studio |
+| **POSTGRESQL_PORT** | Numéro de port sur lequel PostgreSQL écoute. | 5432 |
+| **NGINX_PORT** | Numéro de port sur lequel NGINX écoute. | 8080 |
+| **POSTGRESQL_NAME** | Nom assigné à tous les objets PostgreSQL déployés par le gabarit. | postgres-database |
+| **STORAGE_CLASS_NAME** | Nom de la classes de stockage utilisée par les volumes. | gp2 |
+| **POSTGRESQL_VOLUME_SIZE** | Capacité du volume persistant PostgreSQL. | 1Gi |
+| **NESTJS_NAME** |  Nom assigné à tous les objets NestJs déployés par le gabarit. | nestjs-backend |
+| **ANGULAR_NAME** |  Nom assigné à tous les objets Angular déployés par le gabarit. | angular-frontend |
+| **GITHUB_REPOSITORY_URI** | Uri du dépôt de code de l'application. | https://github.com/CQEN-QDCE/ssi-studio.git |
+| **KEYCLOAK_ADMIN_USER** | Nom d'utilisateur de l'administrateur Keycloak. | admin |
+| **KEYCLOAK_ADMIN_PASSWORD** | Mot de passe de l'utilisateur administrateur Keycloak. | {auto-généré} |
+| **KEYCLOAK_REALM** |  | SSI-Studio |
+| **KEYCLOAK_CLIENT_ID** |  Nom assigné à tous les objets NestJs déployés par le gabarit. | angular-app |
+| **KEYCLOAK_DATABASE_NAME** | Nom de la base de données de Keycloak. | keycloak |
+| 
