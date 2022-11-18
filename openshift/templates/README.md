@@ -11,12 +11,7 @@ Ce dépôt contient les instructions nécessaires pour déployer SSI Studio sur 
 
 Tous les paramètres du gabarit sont obligatoires. La plupart d'entre eux ont des valeurs par défaut, mais certains n'en ont pas. Ils doivent être fournis lors de l'instanciation avec 'oc process'.
 
-### Paramètres d'entrée requis
-
-| Paramètre | Description |
-| --------- | ----------- |
-| **APP_DOMAIN** | Le nom d'hôte externe pour accéder à l'application |
-
+Le fichier de paramètres permet la personnalisation de l'installation pour un environnement particulier (par exemple).
 
 Commencer par créer un projet sur OpenShift:
 ```bash
@@ -27,7 +22,7 @@ Lancez l'installation sur OpenShift
 oc process -f ./ssi-studio.yaml --param-file=./ssi-studio.dev.params | oc apply -f -
 ```
 
-Une fois que tous les pods sont démarrés, vous pouvez accéder à l'application à l'adresse https://ssi-studio.<nom d'hôte externe>/.
+Une fois que tous les pods sont démarrés, vous pouvez accéder à l'application à l'adresse https://ssi-studio.<nom domaine externe>/.
 
 Paramètres avec valeurs par défaut
 | Paramètre | Description | Défaut      |
