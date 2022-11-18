@@ -22,7 +22,7 @@ Lancez l'installation sur OpenShift
 oc process -f ./ssi-studio.yaml --param-file=./ssi-studio.dev.params | oc apply -f -
 ```
 
-Une fois que tous les pods sont démarrés, vous pouvez accéder à l'application à l'adresse https://ssi-studio.<nom domaine externe>/.
+Une fois que tous les pods sont démarrés, vous pouvez accéder à l'application à l'adresse https://ssi-studio.<nom_domaine_externe>/.
 
 Paramètres avec valeurs par défaut
 | Paramètre | Description | Défaut      |
