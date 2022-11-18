@@ -1,4 +1,4 @@
-# Déploiement du SSI Lab sur OpenShift
+# Déploiement SSI Studio sur OpenShift
 
 Ce dépôt contient les instructions nécessaires pour déployer SSI Lab sur OpenShift.
 
