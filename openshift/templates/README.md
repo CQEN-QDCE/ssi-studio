@@ -4,8 +4,8 @@ Ce dépôt contient les instructions nécessaires pour déployer SSI Studio sur 
 
 | Gabarit  | Descripton |
 | -------- | ---------- |
-| [ssi-studio.yaml](https://github.com/CQEN-QDCE/ssi-studio/blob/main/taiga/openshift/templates/ssi-studio.yaml) | Installation de l'application. |
-| [ssi-studio.dev.params](https://github.com/CQEN-QDCE/ssi-studio/blob/main/taiga/openshift/templates/ssi-studio.dev.params) | Paramètres de développement. |
+| [ssi-studio.yaml](https://github.com/CQEN-QDCE/ssi-studio/blob/main/ssi-studio/openshift/templates/ssi-studio.yaml) | Installation de l'application. |
+| [ssi-studio.dev.params](https://github.com/CQEN-QDCE/ssi-studio/blob/main/ssi-studio/openshift/templates/ssi-studio.dev.params) | Paramètres de développement. |
 
 ## Paramètres du gabarit
 
