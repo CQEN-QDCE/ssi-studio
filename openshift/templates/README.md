@@ -24,7 +24,6 @@ oc process -f ./ssi-studio.yaml --param-file=./ssi-studio.dev.params | oc apply 
 
 Une fois que tous les pods sont démarrés, vous pouvez accéder à l'application à l'adresse https://ssi-studio.<APP_DOMAIN>.
 
-Paramètres avec valeurs par défaut
 | Paramètre | Description | Défaut      |
 | --------- | ----------- | ----------- |
 | **APP_NAME** | Nom utilisé pourregrouper les composantes ensembles dans la console OpenShift. | ssi-studio |
