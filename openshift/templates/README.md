@@ -34,23 +34,23 @@ Paramètres avec valeurs par défaut
 | **APP_NAME** | Nom utilisé pourregrouper les composantes ensembles dans la console OpenShift. | ssi-studio |
 | **APP_DOMAIN** | Le nom de domaine externe pour accéder à l'application. | |
 | **APP_SUBDOMAIN** | Le nom de sous domaine pour accéder à l'application. | ssi-studio |
-| **KEYCLOAK_SUBDOMAIN** | Le nom de sous domaine pour accéder à Keycloak. | ssi-studio-keycloak |
 | **POSTGRESQL_USERNAME** | Nom d'utilisateur PostgreSQL. | dbuser |
 | **POSTGRESQL_PASSWORD** | Mot de passe de l'utilisateur PostgreSQL. | {auto-généré} |
 | **POSTGRESQL_ADMIN_USERNAME** | Nom d'utilisateur de l'administrateur PostgreSQL. | postgres |
 | **POSTGRESQL_ADMIN_PASSWORD** | Mot de passe de l'utilisateur administrateur PostgreSQL. | {auto-généré} |
 | **POSTGRESQL_DATABASE_NAME** | Nom de la base de données de l'application. | ssi-studio |
 | **POSTGRESQL_PORT** | Numéro de port sur lequel PostgreSQL écoute. | 5432 |
-| **NGINX_PORT** | Numéro de port sur lequel NGINX écoute. | 8080 |
 | **POSTGRESQL_NAME** | Nom assigné à tous les objets PostgreSQL déployés par le gabarit. | postgres-database |
-| **STORAGE_CLASS_NAME** | Nom de la classes de stockage utilisée par les volumes. | gp2 |
 | **POSTGRESQL_VOLUME_SIZE** | Capacité du volume persistant PostgreSQL. | 1Gi |
 | **NESTJS_NAME** |  Nom assigné à tous les objets NestJs déployés par le gabarit. | nestjs-backend |
 | **ANGULAR_NAME** |  Nom assigné à tous les objets Angular déployés par le gabarit. | angular-frontend |
-| **GITHUB_REPOSITORY_URI** | Uri du dépôt de code de l'application. | https://github.com/CQEN-QDCE/ssi-studio.git |
+| **KEYCLOAK_SUBDOMAIN** | Le nom de sous domaine pour accéder à Keycloak. | ssi-studio-keycloak |
 | **KEYCLOAK_ADMIN_USER** | Nom d'utilisateur de l'administrateur Keycloak. | admin |
 | **KEYCLOAK_ADMIN_PASSWORD** | Mot de passe de l'utilisateur administrateur Keycloak. | {auto-généré} |
-| **KEYCLOAK_REALM** |  | SSI-Studio |
+| **KEYCLOAK_REALM** | Nom du domain keycloak de l'application | SSI-Studio |
 | **KEYCLOAK_CLIENT_ID** |  Nom assigné à tous les objets NestJs déployés par le gabarit. | angular-app |
 | **KEYCLOAK_DATABASE_NAME** | Nom de la base de données de Keycloak. | keycloak |
-| 
+| **GITHUB_REPOSITORY_URI** | Uri du dépôt de code de l'application. | https://github.com/CQEN-QDCE/ssi-studio.git |
+| **STORAGE_CLASS_NAME** | Nom de la classes de stockage utilisée par les volumes. | gp2 |
+| **NGINX_PORT** | Numéro de port sur lequel NGINX écoute. | 8080 |
+
