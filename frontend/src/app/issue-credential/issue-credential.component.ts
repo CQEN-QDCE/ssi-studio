@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { AgentTemplate } from '../models/agent-template';
 import { TranslateService } from '@ngx-translate/core';

@@ -34,7 +34,7 @@
         <button type="button" pButton icon="fa fa-check" (click)="save()" [label]="confirmLabel"></button>
     </p-footer>
 </p-dialog>
-<p-dialog header="Issue Credentials" [(visible)]="issueCredentialDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
+<p-dialog header="{{'IssueCredentials' | translate }}" [(visible)]="issueCredentialDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
     <div *ngIf="issueCredentialDialogVisible">
         <div class="grid">
             <div class="col-12">

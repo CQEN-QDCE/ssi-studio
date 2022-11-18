@@ -47,6 +47,8 @@ export class CredentialOfferComponent implements OnInit, OnDestroy {
 
   private credentialDefinition: CredentialDefinition | null = null;
 
+  private revocable: boolean = false;
+
   private credentialDefinitionId: string | null = null;
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
@@ -61,6 +63,11 @@ export class CredentialOfferComponent implements OnInit, OnDestroy {
       this.schemaName = schemaId.name;
       this.changeCredentialDefinitionId(this.credentialDefinition.id); 
     }
+  };
+
+  @Input('revocable') 
+  set setRevocable(value: boolean) {
+    this.revocable = value;
   };
 
   @Input('agentTemplate') 
@@ -110,6 +117,7 @@ export class CredentialOfferComponent implements OnInit, OnDestroy {
               issueCredential.credentialPreview = connection.credentialOfferDict.credential_preview.attributes;
               issueCredential.credentialExchangeId = connection.credentialExchangeId;
               issueCredential.agentTemplateId = agentTemplate.id;
+              issueCredential.revocable = this.revocable;
               this.issueCredentialService.save(issueCredential).subscribe(() => {
                 this.credentialIssued.emit();
               });

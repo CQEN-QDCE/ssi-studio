@@ -3,6 +3,7 @@ export class IssueCredential {
     id: string;
     name: string;
     credentialPreview: any;
+    revocable: boolean;
     revoked: boolean;
     credentialExchangeId: string;
     agentTemplateId: string;
@@ -11,6 +12,7 @@ export class IssueCredential {
         this.id = '';
         this.name = '';
         this.credentialPreview = '';
+        this.revocable = false;
         this.revoked = false;
         this.credentialExchangeId = '';
         this.agentTemplateId = '';
@@ -22,6 +24,7 @@ export class IssueCredential {
         issueCredential.id = dto.id;
         issueCredential.name = dto.name;
         issueCredential.credentialPreview = dto.credentialPreview;
+        issueCredential.revocable = dto.revoked;
         issueCredential.revoked = dto.revoked;
         issueCredential.credentialExchangeId = dto.credentialExchangeId;
         issueCredential.agentTemplateId = dto.agentTemplateId;
