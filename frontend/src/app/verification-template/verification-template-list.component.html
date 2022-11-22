@@ -1,4 +1,7 @@
-<button pButton class="p-button-rounded" type="button" icon="fa fa-plus" (click)="create()" label="{{'CreateVerificationTemplateLabel' | translate }}"></button>
+<div class="app-page-header">
+    <h1 class="app-page-header-title">{{'VerificationsLabel' | translate }}</h1>
+    <button pButton class="p-button-rounded app-page-header-button" type="button" icon="fa fa-plus" (click)="create()" label="{{'CreateVerificationTemplateLabel' | translate }}"></button>
+</div>
 <p-table [value]="verificationTemplates" styleClass="p-datatable-striped">
     <ng-template pTemplate="header">
         <tr>

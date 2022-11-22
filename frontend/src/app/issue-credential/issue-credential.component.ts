@@ -67,6 +67,7 @@ export class IssueCredentialComponent implements OnInit, OnDestroy {
 
   private load(): void {
     if (this.agentTemplate === null) return;
+    if (this.agentTemplate.url === '') return;
     this.issueCredentialService.getAllByAgent(this.agentTemplate.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(issueCredentials => {
         this.issueCredentials = issueCredentials;
     });

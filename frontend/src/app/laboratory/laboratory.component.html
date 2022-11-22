@@ -1,9 +1,7 @@
-<div class="grid">
-    <div class="col-2">
-        <p-menu [model]="items" [style]="{'width':'100%'}"></p-menu>
-    </div>
-    <div class="col-10">
-        <router-outlet></router-outlet>
-    </div>
+<div class="side-menu app-bc-primary-light">
+    <p-menu [model]="menuItems" styleClass="side-menu" [style]="{'width':'100%', 'margin':'0px', 'background': 'transparent', 'border':'none'}"></p-menu>
+</div>
+<div class="content app-bc-content">
+    <router-outlet></router-outlet>
 </div>
  

@@ -1,0 +1,9 @@
+<h1><span class="resource-icon">Agent</span> {{agentTemplate.name}}</h1>
+<p-tabView>
+    <p-tabPanel header="Details">
+       <agent-config [agentConfig]="agentConfig"></agent-config>
+    </p-tabPanel>
+    <p-tabPanel header="Issue Credentials">
+        <issue-credential [agentTemplate]="agentTemplate"></issue-credential>
+    </p-tabPanel>
+</p-tabView>
