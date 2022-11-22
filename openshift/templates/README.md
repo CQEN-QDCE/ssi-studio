@@ -1,4 +1,4 @@
-# Déploiement SSI Studio sur OpenShift
+# Déployer SSI Studio sur OpenShift
 
 Ce dépôt contient les instructions nécessaires pour déployer SSI Studio sur OpenShift.
 
