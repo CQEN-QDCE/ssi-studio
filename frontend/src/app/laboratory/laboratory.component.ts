@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Event, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MenuItem } from 'primeng/api';
-import { lastValueFrom, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Laboratory } from '../models/laboratory';
 import { Routes } from '../routes';
 import { LaboratoryService } from '../services/laboratory.service';
@@ -12,9 +12,10 @@ import { LaboratoryService } from '../services/laboratory.service';
   templateUrl: './laboratory.component.html',
   styleUrls: ['./laboratory.component.css']
 })
+
 export class LaboratoryComponent implements OnInit, OnDestroy {
 
-    items: MenuItem[] = [];
+    menuItems: MenuItem[] = [];
 
     laboratory: Laboratory = new Laboratory();
 
@@ -28,49 +29,65 @@ export class LaboratoryComponent implements OnInit, OnDestroy {
 
     async ngOnInit(): Promise<void> {
         this.route.paramMap.pipe(takeUntil(this.ngUnsubscribe)).subscribe(params => {
-            let laboratoryId = params.get('id');
+            const laboratoryId = params.get('id');
             if (laboratoryId) {
                 this.laboratoryService.get(laboratoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(laboratory => {
                     this.laboratory = laboratory;
                 });
             }
         });
-        await lastValueFrom(this.translate.get('Translation'));
-        this.items = [/*{
-            label: 'Dashboard',
-            icon: 'fa fa-home',
-            command: (event) => {
-                this.navigateToDashboard();
+
+        this.router.events.subscribe((event: Event) => {
+            if (event instanceof NavigationEnd) this.activeMenuItemByUrl(event.url);
+        });
+
+        this.initMenuItems();
+        
+        this.activeMenuItemByUrl(this.router.url);
+    }
+
+    private initMenuItems(): void {
+        this.menuItems = [
+            {
+                label: this.translate.instant('AgentsLabel'),
+                icon: 'fa fa-server',
+                styleClass: '',
+                command: () => this.navigateToAgents()               
+            },
+            {
+                label: this.translate.instant('CredentialsLabel'),
+                icon: 'fa fa-credit-card',
+                styleClass: '',
+                command: () => this.navigateToCredentials()
+            },
+            {
+                label: this.translate.instant('VerificationsLabel'),
+                icon: 'fa fa-check',
+                styleClass: '',
+                command: () => this.navigateToVerifications()
             }
-        },
-        {
-            label: 'Connections',
-            icon: 'fa fa-users',
-            command: (event) => {
-                this.navigateToConnections();
-            }
-        },*/
-        {
-            label: this.translate.instant('AgentsLabel'),
-            icon: 'fa fa-server',
-            command: (event) => {
-                this.navigateToAgents();
-            }
-        },
-        {
-            label: this.translate.instant('CredentialsLabel'),
-            icon: 'fa fa-credit-card',
-            command: (event) => {
-                this.navigateToCredentials();
-            }
-        },
-        {
-            label: this.translate.instant('VerificationsLabel'),
-            icon: 'fa fa-check',
-            command: (event) => {
-                this.navigateToVerifications();
-            }
-        }]
+        ];
+    }
+
+    private activeMenuItemByUrl(url: string): void {
+        if (url.indexOf(Routes.LABORATORY) >= 0 && url.indexOf(Routes.AGENT) >= 0) {
+            this.activeMenuItemByLabel(this.translate.instant('AgentsLabel'));
+        } else if (url.indexOf(Routes.LABORATORY) >= 0 && url.indexOf(Routes.CREDENTIAL) >= 0) {
+            this.activeMenuItemByLabel(this.translate.instant('CredentialsLabel'));
+        } else if (url.indexOf(Routes.LABORATORY) >= 0 && url.indexOf(Routes.VERIFICATION) >= 0) {
+            this.activeMenuItemByLabel(this.translate.instant('VerificationsLabel'));
+        }
+    }
+
+    private inactiveAllMenuItem(): void {
+        for (const menuItem of this.menuItems) menuItem.styleClass = '';
+    }
+
+    private activeMenuItemByLabel(label: string): void {
+        this.inactiveAllMenuItem();
+        for (const menuItem of this.menuItems) {
+            if (menuItem.label === label) menuItem.styleClass = 'active';
+        }
     }
 
     ngOnDestroy(): any {

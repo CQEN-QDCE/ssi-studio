@@ -1,1 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
+.app-bc-primary {
+    background-color: rgb(9, 87, 151);
+    background-color: #030303;
+}
+.app-bc-primary-dark {
+    background-color: rgb(34, 54, 84);
+}
+.app-bc-primary-mid {
+    background-color: rgb(25, 64, 108);
+}
+.app-bc-primary-light {
+    background-color: rgb(20, 121, 204);
+    background-color: #212427
+}
+.app-bc-primary-pale {
+    background-color: rgb(218, 230, 240);
+}
+.app-bc-content {
+    background-color: rgb(255, 255, 255);
+}
+
+.app-fc-black {
+    color: black;
+}
+
+.app-bc-transparent {
+    background-color: transparent;
+}
+
+.p-menu.side-menu .p-menuitem-link .p-menuitem-icon {
+    color: white;
+}
+
+.p-menu.side-menu .p-menuitem-link .p-menuitem-text {
+    color: white;
+}
+
+.p-menu.side-menu .p-menuitem.active {
+    background-color: orange;
+    background-color: #4f5255;
+}
+
+.p-menu.side-menu .p-menuitem-link:not(.p-disabled):hover {
+    background-color: orange;
+    background-color: #4f5255;
+}
+
+.app-page-header {
+    position: relative;
+}
+
+.app-page-header-title {
+    display: inline-block
+}
+
+.app-page-header-button {
+    position: absolute; 
+    right: 0; 
+    top: 20px;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    border: none;
+    border-bottom: 1px solid #c8c8c8
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    border: none;
+    border-bottom: 1px solid #c8c8c8;
+    background: transparent;
+}

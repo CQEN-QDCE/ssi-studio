@@ -12,6 +12,7 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { SchemaEditorComponent } from './schema-editor/schema-editor.component';
 import { DropdownModule } from 'primeng/dropdown';
+import { TabViewModule } from 'primeng/tabview';
 import { MenubarModule } from 'primeng/menubar';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -56,7 +57,7 @@ import { HomeComponent } from './dashboard/home.component';
 import { ConnectionsComponent } from './connection/connections.component';
 import { CredentialTemplateService } from './services/credential-template.service';
 import { VerificationTemplateService } from './services/verification-template.service';
-import { CredentialTemplateComponent } from './credential-template/credential-template.component';
+import { CredentialTemplateListComponent } from './credential-template/credential-template-list.component';
 import { VerificationTemplateListComponent } from './verification-template/verification-template-list.component';
 import { VerificationTemplateFormComponent } from './verification-template/verification-template-form.component';
 import { CredentialTemplateViewComponent } from './credential-template/credential-template-view.component';
@@ -65,7 +66,7 @@ import { PresentProofService } from './services/present-proof.service';
 import { VerificationRequestComponent } from './proof/verification-request.component';
 import { RequestVerificationComponent } from './proof/request-verification.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { AgentTemplateComponent } from './agent-template/agent-template-list.component';
+import { AgentTemplateListComponent } from './agent-template/agent-template-list.component';
 import { AgentTemplateService } from './services/agent-template.service';
 import { AgentComponent } from './agent-template/agent-template-form.component';
 import { ServerService } from './services/server.service';
@@ -83,12 +84,15 @@ import { initializeKeycloak } from './init/keycloak-init.factory';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { ConfigInitService } from './init/config-init.service';
 import { translateInitializerFactory } from './init/translate-init.factory';
+import { AgentTemplateDetailsComponent } from './agent-template/agent-template-details.component';
+import { CredentialTemplateDetailsComponent } from './credential-template/credential-template-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CredentialOfferComponent,
-    AgentTemplateComponent,
+    AgentTemplateListComponent,
+    AgentTemplateDetailsComponent,
     AgentComponent,
     IssueCredentialComponent,
     AgentConfigComponent,
@@ -100,7 +104,8 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     HomeComponent,
     ConnectionsComponent,
     ErrorDialogComponent,
-    CredentialTemplateComponent,
+    CredentialTemplateListComponent,
+    CredentialTemplateDetailsComponent,
     CredentialTemplateViewComponent,
     VerificationTemplateListComponent,
     VerificationTemplateFormComponent,
@@ -138,6 +143,8 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     MultiSelectModule,
     ReactiveFormsModule,
     InputTextModule,
+    TabViewModule,
+    DataViewModule,
     OverlayPanelModule,
     SelectButtonModule,
     AccordionModule,

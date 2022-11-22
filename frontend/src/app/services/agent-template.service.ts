@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { AgentTemplate } from '../models/agent-template';
 import { Routes } from '../routes';
+import { AgentType } from '../models/agentType.enum';
 
 @Injectable()
 export class AgentTemplateService {
 
   private apiUrl: string = environment.config.apiUrl;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private handler: HttpBackend) {
   }
 
   getAllByLaboratory(laboratoryId: string): Observable<AgentTemplate[]> {
@@ -21,6 +22,21 @@ export class AgentTemplateService {
         });
         return agentTemplates.sort((a,b) => a.name.localeCompare(b.name));
       }));
+  }
+
+  findAgentType(url: string): Observable<AgentType> {
+    const subject = new Subject<AgentType>();
+    new HttpClient(this.handler).get<any>(`${url}/discover-features/query`).subscribe(
+      { 
+          next: (dto) => {
+              subject.next(AgentType.AcaPy);
+          },
+          error: (error) => {
+              subject.next(AgentType.Unknown);
+          }
+      }
+  );
+    return subject.asObservable();
   }
 
   get(id: string): Observable<AgentTemplate> {

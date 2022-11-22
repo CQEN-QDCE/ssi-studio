@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { CredentialDefinition } from '../models/credential-definition';
 import { CredentialTemplate } from '../models/credential-template';
@@ -12,7 +12,7 @@ import { CreateSchemaResponse } from '../models/create-schema-response';
 import { CreateCredentialDefinitionRequest } from '../models/create-credential-definition-request';
 import { CredentialOfferComponent } from '../credential-issuer/credential-issuer.component';
 import { OcaLanguageSelectorComponent } from '../oca/components/oca-language-selector.component';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { OcaEditorComponent } from '../oca/components/oca-editor.component';
 import { AgentTemplate } from '../models/agent-template';
 import { AgentTemplateService } from '../services/agent-template.service';
@@ -20,11 +20,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { AnonCredSchemaFormComponent } from '../anoncred/anoncred-schema-form.component';
 
 @Component({
-  selector: 'credential-template',
-  templateUrl: './credential-template.component.html',
-  styleUrls: ['./credential-template.component.css']
+  selector: 'credential-template-list',
+  templateUrl: './credential-template-list.component.html',
+  styleUrls: ['./credential-template-list.component.css']
 })
-export class CredentialTemplateComponent implements OnInit, OnDestroy {
+export class CredentialTemplateListComponent implements OnInit, OnDestroy {
 
   credentialTemplates: CredentialTemplate[] = [];
 
@@ -43,6 +43,10 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
   blocked: boolean = false;
 
   newVersion: boolean = false;
+
+  items: MenuItem[] = [];
+
+  currentRowIndex: number = -1;
 
   confirmLabel: string = 'Confirm';
 
@@ -65,6 +69,7 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
   @ViewChild('anoncredForm') anoncredForm: AnonCredSchemaFormComponent | null = null;
     
   constructor(private readonly route: ActivatedRoute, 
+              public readonly router: Router,
               private readonly schemaService: SchemaService,
               private readonly credentialDefinitionService: CredentialDefinitionService,
               private readonly agentTemplateService: AgentTemplateService,
@@ -83,7 +88,11 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
         });
       }
     })
-    await lastValueFrom(this.translate.get('Translation'));
+    this.initMenuItems();
+  }
+
+  setCurrentRow(rowIndex: number): void {
+    this.currentRowIndex = rowIndex;
   }
 
   changeAgentTemplateId(agentTemplate: AgentTemplate): void {
@@ -109,6 +118,24 @@ export class CredentialTemplateComponent implements OnInit, OnDestroy {
     this.ocaCredentialTemplateDialogVisible = true;
   }
  
+  private initMenuItems(): void {
+    this.items = [{
+      label: 'Create New Version',
+      icon: 'fa fa-clone',
+      command: () => {
+        this.editTemplate(this.currentRowIndex);
+      }
+  },
+  {
+      label: 'Delete',
+      icon: 'fa fa-trash',
+      command: () => {
+        this.deleteTemplate(this.currentRowIndex);
+      }
+  }
+  ];
+  }
+
   cancel(): void {
     this.credentialTemplate = new CredentialTemplate();
     this.credentialTemplateDialogVisible = false;

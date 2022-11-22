@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, Event, NavigationEnd } from '@angular/router';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { AgentTemplate } from '../models/agent-template';
 import { AgentTemplateService } from '../services/agent-template.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,13 +13,15 @@ import { AgentComponent } from './agent-template-form.component';
   templateUrl: './agent-template-list.component.html',
   styleUrls: ['./agent-template-list.component.css']
 })
-export class AgentTemplateComponent implements OnInit, OnDestroy {
+export class AgentTemplateListComponent implements OnInit, OnDestroy {
 
   agentTemplates: AgentTemplate[] = [];
 
   agentTemplate: AgentTemplate = new AgentTemplate();
 
   agentTemplateIndex: number = -1;
+
+  items: MenuItem[] = [];
 
   agentTemplateDialogVisible: boolean = false;
 
@@ -29,6 +31,8 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
 
   confirmLabel: string = 'Accept';
 
+  currentRowIndex: number = -1;
+
   @ViewChild('agent') agentForm: AgentComponent | null = null;
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
@@ -36,6 +40,7 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
   private laboratoryId: string | null = null;
    
   constructor(private readonly route: ActivatedRoute, 
+              public readonly router: Router,
               private readonly confirmationService: ConfirmationService,
               private readonly agentTemplateService: AgentTemplateService,
               private readonly translate: TranslateService) { 
@@ -51,7 +56,7 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
         });
       }
     });
-    await lastValueFrom(this.translate.get('Translation'));
+    this.initMenuItems();
   }
 
   ngOnDestroy(): any {
@@ -59,11 +64,39 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  createTemplate(): void {
+  private initMenuItems(): void {
+    this.items = [{
+      label: 'Update',
+      icon: 'pi pi-pencil',
+      command: (rowIndex: number) => {
+        this.editTemplate(this.currentRowIndex);
+      }
+  },
+  {
+      label: 'Delete',
+      icon: 'fa fa-trash',
+      command: (rowIndex: number) => {
+        this.deleteTemplate(this.currentRowIndex);
+      }
+  }
+  ];
+  }
+
+  setCurrentRow(rowIndex: number): void {
+    this.currentRowIndex = rowIndex;
+  }
+
+  create(): void {
     this.agentTemplate = new AgentTemplate();
     this.agentTemplate.laboratoryId = this.laboratoryId || '';
     this.confirmLabel = this.translate.instant('CreateLabel');
     this.agentTemplateDialogVisible = true;
+  }
+
+  navigate(index: number): void {
+    const agentTemplate = this.agentTemplates[index];
+    const url = this.router.url + '/' + agentTemplate.id;
+    this.router.navigateByUrl(url);
   }
 
   editTemplate(index: number): void {
@@ -72,25 +105,16 @@ export class AgentTemplateComponent implements OnInit, OnDestroy {
     this.confirmLabel = this.translate.instant('SaveLabel');
     this.agentTemplateDialogVisible = true;
   }
-
-  showIssueCredentials(index: number): void {
-    this.agentTemplate = _.cloneDeep(this.agentTemplates[index]);
-    this.agentTemplateIndex = index;
-    this.issueCredentialDialogVisible = true;
-  }
  
   cancel(): void {
     this.agentTemplate = new AgentTemplate();
     this.agentTemplateDialogVisible = false;
   }
 
-  closeIssueCredential(): void {
-    this.issueCredentialDialogVisible = false;
-  }
-
-  save(): void {
+  async save(): Promise<void> {
     if (!this.agentForm) return;
-    if (!this.agentForm.validate()) return;
+    const isValid = await this.agentForm.validate();
+    if (!isValid) return;
     this.blocked = true;
     if (this.agentTemplate.id === '') {
       this.agentTemplateService.create(this.agentTemplate).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentTemplate => {

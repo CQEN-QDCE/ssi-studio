@@ -3,10 +3,11 @@
         <div class="col-12">
             <label for="name">{{'UrlLabel' | translate }}*</label>
             <div class="ui-inputgroup">
-                <input id="url" name="url" type="text" pInputText [(ngModel)]="agentTemplate.url" maxlength="2048" [style]="{'width':'100%'}" ngModel #url="ngModel" required>
+                <input #agentUrl id="url" name="url" type="text" pInputText [(ngModel)]="agentTemplate.url" (change)="validateUrl()" maxlength="2048" [style]="{'width':'100%'}" ngModel #url="ngModel" required>
                 <div *ngIf="url.invalid && (url.dirty)" lass="alert">
                   <div *ngIf="url.errors?.['required']"> Url is required.</div>
                   <div *ngIf="url.errors?.['maxlength']">Url must be at most 2048 characters long.</div>
+                  <div *ngIf="url.errors?.['invalid']">Url must be valid.</div>
                 </div>
             </div>
         </div>
@@ -28,10 +29,6 @@
                     <div *ngIf="apiKey.errors?.['maxlength']">API key must be at most 60 characters long.</div>
                 </div>
             </div>
-        </div>
-        <div class="col-12">
-            <label for="name">{{'ConfigLabel' | translate }}</label>
-            <agent-config [agentConfig]="agentConfig"></agent-config>
         </div>
     </div>
 </form>
