@@ -39,6 +39,9 @@ import {
   TokenValidation
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
+import { WebHookController } from './webhook/webhook.controller';
+import { WebHookService } from './webhook/webhook.service';
+import { SseService } from './webhook/sse.service';
 
 @Module({
   imports: [
@@ -69,12 +72,15 @@ import { APP_GUARD } from '@nestjs/core';
     ConnectionController, 
     AgentController,
     UserController,
+    WebHookController,
     IssueCredentialController],
   providers: [
     AppService, 
     OcaService, 
     OcaSchemaService, 
     LaboratoryService, 
+    WebHookService,
+    SseService,
     CredentialService, 
     VerificationService, 
     ConnectionService, 

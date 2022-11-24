@@ -86,12 +86,16 @@ import { ConfigInitService } from './init/config-init.service';
 import { translateInitializerFactory } from './init/translate-init.factory';
 import { AgentTemplateDetailsComponent } from './agent-template/agent-template-details.component';
 import { CredentialTemplateDetailsComponent } from './credential-template/credential-template-details.component';
+import { SseService } from './services/sse.service';
+import { MyService } from './services/my.service';
+import { ChatComponent } from './agent-template/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CredentialOfferComponent,
     AgentTemplateListComponent,
+    ChatComponent,
     AgentTemplateDetailsComponent,
     AgentComponent,
     IssueCredentialComponent,
@@ -165,6 +169,8 @@ import { CredentialTemplateDetailsComponent } from './credential-template/creden
   providers: [
     ConnectionService,
     IssuerService,
+    MyService,
+    SseService,
     IssueCredentialService,
     Poller,
     CredentialTemplateService,
