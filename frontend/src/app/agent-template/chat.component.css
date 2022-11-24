@@ -1,0 +1,27 @@
+.workspace-list-item {
+    margin: .5em;
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    border: 1px solid rgb(128,128,128);
+    width: 28rem;
+    height: 20rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    background-color: rgb(200,200,200);
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.message {
+    background-color: rgb(240,240,240);
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin: 10px;
+}

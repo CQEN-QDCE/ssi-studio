@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { KeycloakService } from 'keycloak-angular';
+import { MyService } from './services/my.service';
 
 @Component({
   selector: 'app-root',

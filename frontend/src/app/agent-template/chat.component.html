@@ -1,0 +1,8 @@
+<p-dataView [value]="conversations">
+    <ng-template let-conversation let-index="rowIndex" pTemplate="listItem">
+        <div class="workspace-list-item">
+            <div class="title">{{conversation.connectionId}}</div>
+            <div *ngFor="let message of conversation.messages" class="message">{{ message.content }}</div>
+        </div>
+    </ng-template>
+</p-dataView>
