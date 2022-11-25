@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { CreateCredentialDefinitionRequest } from '../models/create-credential-definition-request';
 import { CredentialDefinitionQuery } from '../models/credential-definition-query';
@@ -14,12 +14,13 @@ export class CredentialDefinitionService {
 
   create(agent: AgentTemplate, request: CreateCredentialDefinitionRequest): Observable<string> {
     let subject = new Subject<string>();
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
     this.http.post<any>(`${agent.url}/credential-definitions`, { 
       revocation_registry_size: request.revocationRegistrySize,
       schema_id: request.schemaId,
       support_revocation: request.supportRevocation,
       tag: request.tag
-    }).subscribe(
+    }, { headers: header }).subscribe(
         { 
           next: (dto) => {
             subject.next(dto.credential_definition_id);
@@ -58,13 +59,15 @@ export class CredentialDefinitionService {
       queryParms += queryParms === '' ? '?' : '&';
       queryParms += 'schema_version=' + query.schemaVersion;      
     }
-    return this.http.get<any>(`${agent.url}/credential-definitions/created${queryParms}`).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agent.url}/credential-definitions/created${queryParms}`, { headers: header }).pipe(map(dto => {
       return dto.credential_definition_ids;
     }));
   }
 
   get(agent: AgentTemplate, credentialDefinitionId: string): Observable<CredentialDefinition> {
-    return this.http.get<any>(`${agent.url}/credential-definitions/${credentialDefinitionId}`).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agent.url}/credential-definitions/${credentialDefinitionId}`, { headers: header }).pipe(map(dto => {
       const credentialDefinition = new CredentialDefinition();
       credentialDefinition.id = dto.credential_definition.id;
       credentialDefinition.schemaId = dto.credential_definition.schemaId;

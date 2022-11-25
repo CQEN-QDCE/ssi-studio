@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpBackend, HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { AgentTemplate } from '../models/agent-template';
 import { Routes } from '../routes';
@@ -24,18 +24,35 @@ export class AgentTemplateService {
       }));
   }
 
-  findAgentType(url: string): Observable<AgentType> {
+  findAgentType(url: string,  apiKey = ''): Observable<AgentType> {
     const subject = new Subject<AgentType>();
-    new HttpClient(this.handler).get<any>(`${url}/discover-features/query`).subscribe(
+    const header = new HttpHeaders({'x-api-key': apiKey});
+    new HttpClient(this.handler).get<any>(`${url}/discover-features/query`, {headers: header}).subscribe(
       { 
-          next: (dto) => {
+          next: () => {
               subject.next(AgentType.AcaPy);
           },
           error: (error) => {
               subject.next(AgentType.Unknown);
           }
       }
-  );
+    );
+    return subject.asObservable();
+  }
+
+  needApiKey(url: string, apiKey = ''): Observable<boolean> {
+    const subject = new Subject<boolean>();
+    const header = new HttpHeaders({'x-api-key': apiKey});
+    new HttpClient(this.handler).get<any>(`${url}/discover-features/query`, {headers: header}).subscribe(
+      { 
+          next: () => {
+              subject.next(false);
+          },
+          error: (error) => {
+              subject.next(true);
+          }
+      }
+    );
     return subject.asObservable();
   }
 

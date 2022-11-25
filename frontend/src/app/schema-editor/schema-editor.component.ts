@@ -107,7 +107,8 @@ export class SchemaEditorComponent implements OnInit {
   searchConnection() {
     const query = new ConnectionQuery();
     query.theirRole = Role.invitee;
-    this.connectionService.search(query).pipe(takeUntil(this.ngUnsubscribe)).subscribe((results: Connection[]) => {
+    if (this.agentTemplate)
+    this.connectionService.search(this.agentTemplate, query).pipe(takeUntil(this.ngUnsubscribe)).subscribe((results: Connection[]) => {
       let bla = 1;
     });
   }

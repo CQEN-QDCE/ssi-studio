@@ -26,6 +26,8 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   @ViewChild('agentUrl') agentUrl: any | null = null;
 
+  @ViewChild('agentApiKey') agentApikey: any | null = null;
+
   agentConfig: AgentConfig = new AgentConfig();
 
   onModelChange: Function = () => { };
@@ -74,8 +76,15 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   async validate(): Promise<boolean> {
     if (!this.agentForm) return false;
-    let url = this.agentUrl.nativeElement.value;
-    const agentType = await firstValueFrom(this.agentTemplateService.findAgentType(url));
+    const url = this.getAgentUrl();
+    const agentApiKey = this.getAgentApiKey();
+    if (await firstValueFrom(this.agentTemplateService.needApiKey(url, agentApiKey))) {
+      for (const control of Object.keys(this.agentForm.controls)) {
+        if (control === 'apiKey') this.agentForm.controls[control].setErrors({ required: true });
+      }
+    }
+
+    const agentType = await firstValueFrom(this.agentTemplateService.findAgentType(url, agentApiKey));
     if (agentType === 'Unknown') {
       for (const control of Object.keys(this.agentForm.controls)) {
         if (control === 'url') this.agentForm.controls[control].setErrors({ invalid: true });
@@ -89,5 +98,13 @@ export class AgentComponent implements OnInit, OnDestroy {
       return false;
     }
     return true;
+  }
+
+  private getAgentUrl(): string {
+    return this.agentUrl.nativeElement.value;
+  }
+
+  private getAgentApiKey(): string {
+    return this.agentApikey.nativeElement.value;
   }
 }
