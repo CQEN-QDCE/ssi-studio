@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { PresentationExchange } from '../models/presentation-exchange';
 import { PresentationRequest } from '../models/presentation-request';
@@ -51,13 +51,13 @@ export class PresentProofService {
     if (presentationRequest.proofRequest.nonRevoked.isDefine) {
       proofRequest.non_revoked = presentationRequest.proofRequest.nonRevoked.toPlainObject();
     }
-
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
     this.http.post<any>(`${agent.url}/present-proof/send-request`, {
       connection_id: presentationRequest.connectionId,
       comment: presentationRequest.comment,
       proof_request: proofRequest,
       trace: presentationRequest.trace
-     }).subscribe(
+     }, { headers: header }).subscribe(
         dto => {
             subject.next(PresentationExchange.fromDto(dto));
         },
@@ -67,14 +67,16 @@ export class PresentProofService {
   }
 
   getPresentationExchange(agent: AgentTemplate, id: string): Observable<PresentationExchange> {
-    return this.http.get<any>(`${agent.url}/present-proof/records/${id}`).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agent.url}/present-proof/records/${id}`, { headers: header }).pipe(map(dto => {
       return PresentationExchange.fromDto(dto);
     }));
   }
 
   verify(agent: AgentTemplate, id: string): Observable<PresentationExchange> {
     let subject = new Subject<PresentationExchange>();
-    this.http.post<any>(`${agent.url}/present-proof/records/${id}/verify-presentation`, {}).subscribe(
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    this.http.post<any>(`${agent.url}/present-proof/records/${id}/verify-presentation`, {}, { headers: header }).subscribe(
         dto => {
             subject.next(PresentationExchange.fromDto(dto));
         },

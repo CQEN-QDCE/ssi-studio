@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { Connection } from '../models/connection';
 import { CreateInvitationRequest } from '../models/create-invitation-request';
@@ -13,10 +13,10 @@ export class ServerService {
   constructor(private http: HttpClient) {
   }
 
-  createInvitation(agent: AgentTemplate, request: CreateInvitationRequest = new CreateInvitationRequest(), autoAccept: boolean = false, multiUse: boolean = false, fromPublicDid: boolean = false, alias: string = ''): Observable<CreateInvitationResponse> {
+  createInvitation(agentTemplate: AgentTemplate, request: CreateInvitationRequest = new CreateInvitationRequest(), autoAccept: boolean = false, multiUse: boolean = false, fromPublicDid: boolean = false, alias: string = ''): Observable<CreateInvitationResponse> {
     let subject = new Subject<CreateInvitationResponse>();
-    request.serviceEndpoint
-    this.http.post<any>(`${agent.url}/connections/create-invitation?auto_accept=${autoAccept}&multi_use=${multiUse}&public=${fromPublicDid}&alias=${alias}`, {}).subscribe(
+    const header = agentTemplate.apiKey ? new HttpHeaders({'x-api-key': agentTemplate.apiKey}) : new HttpHeaders();
+    this.http.post<any>(`${agentTemplate.url}/connections/create-invitation?auto_accept=${autoAccept}&multi_use=${multiUse}&public=${fromPublicDid}&alias=${alias}`, {}, { headers: header }).subscribe(
         res => {
             subject.next({
               connectionId: res.connection_id,
@@ -30,7 +30,8 @@ export class ServerService {
   }
 
   fetchConfig(agentTemplate: AgentTemplate): Observable<AgentConfig> {
-    return this.http.get<any>(`${agentTemplate.url}/status/config`).pipe(map(dto => {
+    const header = agentTemplate.apiKey ? new HttpHeaders({'x-api-key': agentTemplate.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agentTemplate.url}/status/config`, { headers: header }).pipe(map(dto => {
       const agentConfig = new AgentConfig();
       agentConfig.admin.insecureMode = dto.config['admin.admin_insecure_mode'];
       agentConfig.admin.enabled = dto.config['admin.enabled'];
@@ -93,8 +94,9 @@ export class ServerService {
     }));
   }
 
-  get(agent: AgentTemplate, id: string): Observable<Connection> {
-    return this.http.get<any>(`${agent.url}/connections/${id}`).pipe(map(dto => {
+  get(agentTemplate: AgentTemplate, id: string): Observable<Connection> {
+    const header = agentTemplate.apiKey ? new HttpHeaders({'x-api-key': agentTemplate.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agentTemplate.url}/connections/${id}`, { headers: header }).pipe(map(dto => {
       return {
         id: dto.connection_id,
         accept: dto.accept,
@@ -119,10 +121,11 @@ export class ServerService {
     }));
   }
 
-  accept(agent: AgentTemplate, id: string, myEndpoint: string = ''): Observable<Connection> {
+  accept(agentTemplate: AgentTemplate, id: string, myEndpoint: string = ''): Observable<Connection> {
     let query = '';
     if (myEndpoint && myEndpoint !== '') query += '?my_endpoint=' + myEndpoint;
-    return this.http.post<any>(`${agent.url}/connections/${id}/accept-request${query}`, {}).pipe(map(dto => {
+    const header = agentTemplate.apiKey ? new HttpHeaders({'x-api-key': agentTemplate.apiKey}) : new HttpHeaders();
+    return this.http.post<any>(`${agentTemplate.url}/connections/${id}/accept-request${query}`, { headers: header }).pipe(map(dto => {
       return {
         id: dto.connection_id,
         accept: dto.accept,
@@ -147,8 +150,9 @@ export class ServerService {
     }));
   }
 
-  delete(agent: AgentTemplate, id: string): Observable<void> {
-    return this.http.delete<any>(`${agent.url}/connections/${id}`);
+  delete(agentTemplate: AgentTemplate, id: string): Observable<void> {
+    const header = agentTemplate.apiKey ? new HttpHeaders({'x-api-key': agentTemplate.apiKey}) : new HttpHeaders();
+    return this.http.delete<any>(`${agentTemplate.url}/connections/${id}`, { headers: header });
   }
 
 }

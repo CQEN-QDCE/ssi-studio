@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { CredentialProposalRequest } from '../models/credential-proposal-request';
 import { CredentialProposalResponse } from '../models/credential-proposal-response';
@@ -13,7 +13,8 @@ export class IssuerService {
   }
 
   getCredentialExchange(agent: AgentTemplate, id: string): Observable<CredentialProposalResponse> {
-    return this.http.get<any>(`${agent.url}/issue-credential/records/${id}`).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agent.url}/issue-credential/records/${id}`, { headers: header }).pipe(map(dto => {
       return {
         autoIssue: dto.auto_issue,
         autoOffer: dto.auto_offer,
@@ -55,6 +56,7 @@ export class IssuerService {
         "value": attribute.value
       });
     }
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
     this.http.post<any>(`${agent.url}/issue-credential/send`, {
       auto_remove: credentialProposalRequest.autoRemove,
       comment: credentialProposalRequest.comment,
@@ -70,7 +72,7 @@ export class IssuerService {
       schema_name: credentialProposalRequest.schemaName,
       schema_version: credentialProposalRequest.schemaVersion,
       trace: credentialProposalRequest.trace
-    }).subscribe(
+    }, { headers: header }).subscribe(
         dto => {
             subject.next({
               autoIssue: dto.auto_issue,
