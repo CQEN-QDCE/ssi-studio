@@ -75,9 +75,11 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      JAVA_OPTS: -Dkeycloak.profile=preview
+      JAVA_OPTS: -Dkeycloak.profile=preview -Dkeycloak.import=/opt/jboss/keycloak/imports/ssi-studio-realm.json
       KEYCLOAK_LOGLEVEL: DEBUG
       ROOT_LOGLEVEL: DEBUG
+    volumes:
+      - ./keycloak:/opt/jboss/keycloak/imports
     command:
       - start-dev
     ports:
