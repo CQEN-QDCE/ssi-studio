@@ -1,0 +1,35 @@
+<form #agentForm="ngForm">
+    <div class="grid">
+        <div class="col-12">
+            <label for="name">{{'UrlLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+                <input #agentUrl id="url" name="url" type="text" pInputText [(ngModel)]="agentTemplate.url" (change)="validateUrl()" maxlength="2048" [style]="{'width':'100%'}" ngModel #url="ngModel" required>
+                <div *ngIf="url.invalid && (url.dirty)" lass="alert">
+                  <div *ngIf="url.errors?.['required']"> Url is required.</div>
+                  <div *ngIf="url.errors?.['maxlength']">Url must be at most 2048 characters long.</div>
+                  <div *ngIf="url.errors?.['invalid']">Url must be valid.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <label for="name">{{'NameLabel' | translate }}*</label>
+            <div class="ui-inputgroup">
+                <input id="name" name="name" type="text" pInputText [(ngModel)]="agentTemplate.name" maxlength="60" [style]="{'width':'100%'}" ngModel #name="ngModel" required>
+                <div *ngIf="name.invalid && (name.dirty)" lass="alert">
+                    <div *ngIf="name.errors?.['required']"> Name is required.</div>
+                    <div *ngIf="name.errors?.['maxlength']">Name must be at most 60 characters long.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="apiKey">{{'ApiKeyLabel' | translate }}</label>
+            <div class="ui-inputgroup">
+                <input #agentApiKey id="apiKey" name="apiKey" type="text" pInputText [(ngModel)]="agentTemplate.apiKey" maxlength="60" [style]="{'width':'100%'}" ngModel #apiKey="ngModel">
+                <div *ngIf="apiKey.invalid && (apiKey.dirty)" lass="alert">
+                    <div *ngIf="apiKey.errors?.['required']"> API key is required.</div>
+                    <div *ngIf="apiKey.errors?.['maxlength']">API key must be at most 60 characters long.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

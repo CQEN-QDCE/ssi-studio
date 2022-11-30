@@ -7,9 +7,9 @@ import { OcaService } from './oca.service';
 import { configService } from './config.service';
 import { OcaSchemaController } from './oca-schema/oca-schema.controller';
 import { OcaSchemaService } from './oca-schema/oca-schema.service';
-import { OrganizationService } from './organization/organization.service';
-import { OrganizationController } from './organization/organization.controller';
-import { Organization } from './model/organization.entity';
+import { LaboratoryService } from './laboratory/laboratory.service';
+import { LaboratoryController } from './laboratory/laboratory.controller';
+import { Laboratory } from './model/laboratory.entity';
 import { CredentialController } from './credential/credential.controller';
 import { CredentialService } from './credential/credential.service';
 import { VerificationService } from './verification/verification.service';
@@ -39,6 +39,9 @@ import {
   TokenValidation
 } from 'nest-keycloak-connect';
 import { APP_GUARD } from '@nestjs/core';
+import { WebHookController } from './webhook/webhook.controller';
+import { WebHookService } from './webhook/webhook.service';
+import { SseService } from './webhook/sse.service';
 
 @Module({
   imports: [
@@ -51,7 +54,7 @@ import { APP_GUARD } from '@nestjs/core';
       tokenValidation: TokenValidation.OFFLINE,
     }),
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-    TypeOrmModule.forFeature([Organization]),
+    TypeOrmModule.forFeature([Laboratory]),
     TypeOrmModule.forFeature([Connection]),
     TypeOrmModule.forFeature([Credential]),
     TypeOrmModule.forFeature([Verification]),
@@ -63,18 +66,21 @@ import { APP_GUARD } from '@nestjs/core';
     AppController, 
     OcaController, 
     OcaSchemaController, 
-    OrganizationController, 
+    LaboratoryController, 
     CredentialController, 
     VerificationController, 
     ConnectionController, 
     AgentController,
     UserController,
+    WebHookController,
     IssueCredentialController],
   providers: [
     AppService, 
     OcaService, 
     OcaSchemaService, 
-    OrganizationService, 
+    LaboratoryService, 
+    WebHookService,
+    SseService,
     CredentialService, 
     VerificationService, 
     ConnectionService, 

@@ -4,14 +4,14 @@ export class AgentTemplate {
 
     id: string;
     name: string;
-    organizationId: string;
+    laboratoryId: string;
     url: string;
     apiKey: string | null;
 
     constructor() {
         this.id = '';
         this.name = '';
-        this.organizationId = '';
+        this.laboratoryId = '';
         this.url = '';
         this.apiKey = null;
     }
@@ -25,7 +25,7 @@ export class AgentTemplate {
         
         template.id = dto.id;
         template.name = dto.name;
-        template.organizationId = dto.organizationId;
+        template.laboratoryId = dto.laboratoryId;
         template.url = dto.url;
         template.apiKey = dto.apiKey;
         

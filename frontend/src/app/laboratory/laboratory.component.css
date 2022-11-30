@@ -1,0 +1,24 @@
+.side-menu {
+    position: absolute; 
+    top: 60px; 
+    bottom: 0px; 
+    width: 280px;
+}
+
+.side-menu-items {
+    width: 100%;
+    margin: 0px;
+    background-color: transparent;
+    border: none;
+}
+
+.content {
+    position: absolute; 
+    top: 60px; 
+    left: 280px; 
+    right: 0px;
+    bottom: 0px; 
+    padding: 20px;
+    padding-top: 0px;
+    overflow: auto;
+}

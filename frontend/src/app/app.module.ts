@@ -12,6 +12,7 @@ import { DynamicFormQuestionComponent } from './dynamic-form/dynamic-form-questi
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { SchemaEditorComponent } from './schema-editor/schema-editor.component';
 import { DropdownModule } from 'primeng/dropdown';
+import { TabViewModule } from 'primeng/tabview';
 import { MenubarModule } from 'primeng/menubar';
 import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,6 +27,7 @@ import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
 import { DragDropModule } from 'primeng/dragdrop';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
 import { OrderListModule } from 'primeng/orderlist';
 import { IssuerService } from './services/issuer.service';
 import { Poller } from './services/poller.service';
@@ -48,26 +50,25 @@ import { OcaMenubarComponent } from './oca/components/oca-menubar.component';
 import { OcaEditorComponent } from './oca/components/oca-editor.component';
 import { OcaAttributeEditorComponent } from './oca/components/oca-attribute-editor.component';
 import { DropDisableDirective } from './drop-disable.directive';
-import { OrganizationService } from './services/organization.service';
-import { OrganizationsViewComponent } from './organization/organizations-view.component';
-import { OrganizationComponent } from './organization/organization.component';
+import { LaboratoryService } from './services/laboratory.service';
+import { LaboratoryListComponent } from './laboratory/laboratory-list.component';
+import { LaboratoryComponent } from './laboratory/laboratory.component';
 import { HomeComponent } from './dashboard/home.component';
 import { ConnectionsComponent } from './connection/connections.component';
 import { CredentialTemplateService } from './services/credential-template.service';
 import { VerificationTemplateService } from './services/verification-template.service';
-import { CredentialTemplateComponent } from './credential-template/credential-template.component';
-import { VerificationTemplateComponent } from './verification-template/verification-template.component';
-import { VerificationTemplateViewComponent } from './verification-template/verification-template-view.component';
-import { VerificationTemplateEditorComponent } from './verification-template/verification-template-editor.component';
+import { CredentialTemplateListComponent } from './credential-template/credential-template-list.component';
+import { VerificationTemplateListComponent } from './verification-template/verification-template-list.component';
+import { VerificationTemplateFormComponent } from './verification-template/verification-template-form.component';
 import { CredentialTemplateViewComponent } from './credential-template/credential-template-view.component';
 import { ConfirmationService } from 'primeng/api';
 import { PresentProofService } from './services/present-proof.service';
 import { VerificationRequestComponent } from './proof/verification-request.component';
 import { RequestVerificationComponent } from './proof/request-verification.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { AgentTemplateComponent } from './agent-template/agent-template.component';
+import { AgentTemplateListComponent } from './agent-template/agent-template-list.component';
 import { AgentTemplateService } from './services/agent-template.service';
-import { AgentComponent } from './agent-template/agent.component';
+import { AgentComponent } from './agent-template/agent-template-form.component';
 import { ServerService } from './services/server.service';
 import { AgentConfigComponent } from './agent-template/agent-config.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -83,29 +84,36 @@ import { initializeKeycloak } from './init/keycloak-init.factory';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { ConfigInitService } from './init/config-init.service';
 import { translateInitializerFactory } from './init/translate-init.factory';
+import { AgentTemplateDetailsComponent } from './agent-template/agent-template-details.component';
+import { CredentialTemplateDetailsComponent } from './credential-template/credential-template-details.component';
+import { SseService } from './services/sse.service';
+import { MyService } from './services/my.service';
+import { ChatComponent } from './agent-template/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CredentialOfferComponent,
-    AgentTemplateComponent,
+    AgentTemplateListComponent,
+    ChatComponent,
+    AgentTemplateDetailsComponent,
     AgentComponent,
     IssueCredentialComponent,
     AgentConfigComponent,
     SchemaEditorComponent,
     OcaEditorComponent,
-    OrganizationsViewComponent,
+    LaboratoryListComponent,
     VerificationRequestComponent,
     RequestVerificationComponent,
     HomeComponent,
     ConnectionsComponent,
     ErrorDialogComponent,
-    CredentialTemplateComponent,
+    CredentialTemplateListComponent,
+    CredentialTemplateDetailsComponent,
     CredentialTemplateViewComponent,
-    VerificationTemplateComponent,
-    VerificationTemplateViewComponent,
-    VerificationTemplateEditorComponent,
-    OrganizationComponent,
+    VerificationTemplateListComponent,
+    VerificationTemplateFormComponent,
+    LaboratoryComponent,
     AnonCredSchemaEditorComponent,
     AnonCredSchemaFormComponent,
     AnonCredCredentialDefinitionEditorComponent,
@@ -139,6 +147,9 @@ import { translateInitializerFactory } from './init/translate-init.factory';
     MultiSelectModule,
     ReactiveFormsModule,
     InputTextModule,
+    TabViewModule,
+    DataViewModule,
+    OverlayPanelModule,
     SelectButtonModule,
     AccordionModule,
     TooltipModule,
@@ -158,12 +169,14 @@ import { translateInitializerFactory } from './init/translate-init.factory';
   providers: [
     ConnectionService,
     IssuerService,
+    MyService,
+    SseService,
     IssueCredentialService,
     Poller,
     CredentialTemplateService,
     VerificationTemplateService,
     AgentTemplateService,
-    OrganizationService,
+    LaboratoryService,
     SchemaService,
     ServerService,
     PresentProofService,

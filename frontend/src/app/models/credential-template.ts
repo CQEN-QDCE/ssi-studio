@@ -8,7 +8,7 @@ export class CredentialTemplate {
     id: string;
     name: string;
     description: string;
-    organizationId: string;
+    laboratoryId: string;
     anoncred: Schema;
     credentialDefinition: CredentialDefinition;
     ocaForm: OcaForm | null = null;
@@ -20,7 +20,7 @@ export class CredentialTemplate {
         this.id = '';
         this.name = '';
         this.description = '';
-        this.organizationId = '';
+        this.laboratoryId = '';
         this.anoncred = new Schema();
         this.credentialDefinition = new CredentialDefinition();
         this.agentTemplateId = '';
@@ -43,7 +43,7 @@ export class CredentialTemplate {
         template.id = dto.id;
         template.name = dto.name;
         template.description = dto.description;
-        template.organizationId = dto.organizationId;
+        template.laboratoryId = dto.laboratoryId;
         template.revocable = dto.revocable;
         template.revocationRegistrySize = dto.revocationRegistrySize;
         template.anoncred = Schema.fromDto(dto.anoncred);

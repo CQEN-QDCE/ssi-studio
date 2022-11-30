@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { AgentTemplate } from '../models/agent-template';
 import { TranslateService } from '@ngx-translate/core';
@@ -68,6 +67,7 @@ export class IssueCredentialComponent implements OnInit, OnDestroy {
 
   private load(): void {
     if (this.agentTemplate === null) return;
+    if (this.agentTemplate.url === '') return;
     this.issueCredentialService.getAllByAgent(this.agentTemplate.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(issueCredentials => {
         this.issueCredentials = issueCredentials;
     });
