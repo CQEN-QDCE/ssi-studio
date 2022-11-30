@@ -1,15 +1,20 @@
 # To clean up as much as possible excluding components that are in use, run this command:
 # docker system prune -a
+# docker volume prune
 version: '3.8'
 services:
   database:
-    image: postgres:alpine
+    image: postgres:14.6-alpine
     environment:
       POSTGRES_DB: ssi_studio
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - 5433:5432
+    networks:
+      default:
+        aliases:
+          - "postgres.localhost"
     volumes:
       - postgres_data:/var/lib/postgresql/data
   api:
