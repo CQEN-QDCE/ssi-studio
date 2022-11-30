@@ -3,55 +3,56 @@ import { Agent } from 'src/model/agent.entity';
 import { AgentService } from './agent.service';
 import { v4 as uuidv4 } from 'uuid';
 import { Roles, RoleMatchingMode } from 'nest-keycloak-connect';
+import { Routes } from 'src/routes';
 
-@Controller('/api/v1')
+@Controller(`${Routes.API}`)
 export class AgentController {
 
     constructor(private service: AgentService) { 
     }
 
-    @Get('organizations/:id/agents')
+    @Get(`/${Routes.LABORATORY}/:id/${Routes.AGENT}`)
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async getAll(@Param('id') id, @Request() request) {
+    async getAll(@Param('id') id, @Request() request) {
       return await this.service.getAll(id, request.user.sub);
     }
 
-    @Get('/agents/:id')
+    @Get(`/${Routes.AGENT}/:id`)
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async get(@Param('id') id, @Request() request) {
+    async get(@Param('id') id, @Request() request) {
       return await this.service.get(id, request.user.sub);
     }
 
-    @Post('/agents')
+    @Post(`/${Routes.AGENT}`)
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async create(@Body() dto: Agent, @Request() request) {
-      const agent = new Agent();
-      agent.id = uuidv4();
-      agent.createdBy = request.user.sub;
-      agent.lastChangedBy = request.user.sub;
-      agent.name = dto.name;
-      agent.organizationId = dto.organizationId;
-      agent.url = dto.url;
-      agent.apiKey = dto.apiKey;
-      return await this.service.create(agent);
+    async create(@Body() dto: Agent, @Request() request) {
+      const entity = new Agent();
+      entity.id = uuidv4();
+      entity.createdBy = request.user.sub;
+      entity.lastChangedBy = request.user.sub;
+      entity.name = dto.name;
+      entity.laboratoryId = dto.laboratoryId;
+      entity.url = dto.url;
+      entity.apiKey = dto.apiKey;
+      return await this.service.create(entity);
     }
 
-    @Put('/agents')
+    @Put(`/${Routes.AGENT}`)
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async update(@Body() dto: Agent, @Request() request) {
-      const agent = new Agent();
-      agent.id = dto.id;
-      agent.lastChangedBy = request.user.sub;
-      agent.name = dto.name;
-      agent.organizationId = dto.organizationId;
-      agent.url = dto.url;
-      agent.apiKey = dto.apiKey;
-      return await this.service.update(agent);
+    async update(@Body() dto: Agent, @Request() request) {
+      const entity = new Agent();
+      entity.id = dto.id;
+      entity.lastChangedBy = request.user.sub;
+      entity.name = dto.name;
+      entity.laboratoryId = dto.laboratoryId;
+      entity.url = dto.url;
+      entity.apiKey = dto.apiKey;
+      return await this.service.update(entity);
     }
 
-    @Delete('/agents/:id')
+    @Delete(`/${Routes.AGENT}/:id`)
     @Roles({ roles: ['user'], mode: RoleMatchingMode.ALL })
-    public async delete(@Param('id') id, @Request() request) {
+    async delete(@Param('id') id, @Request() request) {
       return await this.service.delete(id, request.user.sub);
     }
   

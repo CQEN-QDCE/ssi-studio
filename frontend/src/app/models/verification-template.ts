@@ -5,14 +5,14 @@ export class VerificationTemplate {
 
     id: string;
     name: string;
-    organizationId: string;
+    laboratoryId: string;
     credentialRequests: CredentialRequest[];
     agentTemplateId: string;
 
     constructor() {
         this.id = '';
         this.name = '';
-        this.organizationId = '';
+        this.laboratoryId = '';
         this.credentialRequests = [];
         this.agentTemplateId = '';
     }
@@ -29,7 +29,7 @@ export class VerificationTemplate {
         const template = new VerificationTemplate();
         template.id = dto.id;
         template.name = dto.name;
-        template.organizationId = dto.organizationId;
+        template.laboratoryId = dto.laboratoryId;
         template.agentTemplateId = dto.agentTemplateId;
         for (const credentialRequest of dto.credentialRequests) template.credentialRequests.push(CredentialRequest.fromDto(credentialRequest));
         return template;

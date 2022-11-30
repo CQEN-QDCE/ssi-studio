@@ -1,15 +1,20 @@
 # To clean up as much as possible excluding components that are in use, run this command:
 # docker system prune -a
+# docker volume prune
 version: '3.8'
 services:
   database:
-    image: postgres:alpine
+    image: postgres:14.6-alpine
     environment:
       POSTGRES_DB: ssi_studio
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - 5433:5432
+    networks:
+      default:
+        aliases:
+          - "postgres.localhost"
     volumes:
       - postgres_data:/var/lib/postgresql/data
   api:
@@ -75,9 +80,11 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      JAVA_OPTS: -Dkeycloak.profile=preview
+      JAVA_OPTS: -Dkeycloak.profile=preview -Dkeycloak.import=/opt/jboss/keycloak/imports/ssi-studio-realm.json
       KEYCLOAK_LOGLEVEL: DEBUG
       ROOT_LOGLEVEL: DEBUG
+    volumes:
+      - ./keycloak:/opt/jboss/keycloak/imports
     command:
       - start-dev
     ports:

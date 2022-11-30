@@ -1,0 +1,38 @@
+<div class="app-page-header">
+    <h1 class="app-page-header-title">{{'AgentsLabel' | translate }}</h1>
+    <button pButton class="p-button-rounded app-page-header-button" type="button" pButton icon="fa fa-plus" (click)="create()" label="{{'CreateAgentTemplateLabel' | translate }}"></button>
+</div>
+<p-table [value]="agentTemplates" styleClass="p-datatable-striped">
+    <ng-template pTemplate="header">
+        <tr>
+            <th width="400" pSortableColumn="name">{{'NameLabel' | translate }} <p-sortIcon field="name"></p-sortIcon></th>
+            <th >{{'UrlLabel' | translate }}</th>
+            <th style="width: 1rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-schemaId let-rowIndex="rowIndex">
+        <tr>
+            <td><a routerLink="{{router.url}}/{{schemaId.id}}">{{schemaId.name}}</a></td>
+            <td><a href="{{schemaId.url}}" target="_blank">{{schemaId.url}}</a></td>
+            <td>
+                <span style="cursor: pointer;" (click)="menu.toggle($event); setCurrentRow(rowIndex)"><svg width="24px" height="24px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>ionicons-v5-f</title><circle cx="256" cy="256" r="48"/><circle cx="256" cy="416" r="48"/><circle cx="256" cy="96" r="48"/></svg></span>
+                <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-dialog header="{{'AgentTemplateTitle' | translate }}" [(visible)]="agentTemplateDialogVisible" [closable]="false" showEffect="fade" [modal]="true" appendTo="body" [style]="{width: '700px'}">
+    <div *ngIf="agentTemplateDialogVisible">
+        <div class="grid">
+            <div class="col-12">
+                <agent-template-form #agent [(ngModel)]="agentTemplate"></agent-template-form>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-close" (click)="cancel()" label="{{'CancelLabel' | translate }}"></button>
+        <button type="button" pButton icon="fa fa-check" (click)="save()" [label]="confirmLabel"></button>
+    </p-footer>
+</p-dialog>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-blockUI [blocked]="blocked"></p-blockUI>

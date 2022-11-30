@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { map, Observable, Subject } from 'rxjs';
 import { Connection } from '../models/connection';
@@ -29,8 +29,7 @@ export class ConnectionService {
     return subject.asObservable();
   }
 
-  // Query agent-to-agent connections
-  search(query: ConnectionQuery = new ConnectionQuery()): Observable<Connection[]> {
+  search(agent: AgentTemplate, query: ConnectionQuery = new ConnectionQuery()): Observable<Connection[]> {
     let params: any[] = [];
     if (query) {
       if (query.alias !== null) params.push('alias=' + query.alias);
@@ -41,7 +40,8 @@ export class ConnectionService {
       if (query.theirRole !== null) params.push('their_role=' + query.theirRole);
     }
     let queryParams = params.length > 0 ? '?' + params.join('&') : '';
-    return this.http.get<any>(`${this.hostUrl}/connections${queryParams}`).pipe(map(dtos => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${this.hostUrl}/connections${queryParams}`, { headers: header }).pipe(map(dtos => {
       const connections: Connection[] = [];
       for (const dto of dtos.results) {
         connections.push({
@@ -72,8 +72,8 @@ export class ConnectionService {
 
   createInvitation(agent: AgentTemplate, request: CreateInvitationRequest = new CreateInvitationRequest(), autoAccept: boolean = false, multiUse: boolean = false, fromPublicDid: boolean = false, alias: string = ''): Observable<CreateInvitationResponse> {
     let subject = new Subject<CreateInvitationResponse>();
-    request.serviceEndpoint
-    this.http.post<any>(`${agent.url}/connections/create-invitation?auto_accept=${autoAccept}&multi_use=${multiUse}&public=${fromPublicDid}&alias=${alias}`, {}).subscribe(
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    this.http.post<any>(`${agent.url}/connections/create-invitation?auto_accept=${autoAccept}&multi_use=${multiUse}&public=${fromPublicDid}&alias=${alias}`, {}, { headers: header }).subscribe(
         res => {
             subject.next({
               connectionId: res.connection_id,
@@ -87,7 +87,8 @@ export class ConnectionService {
   }
 
   get(agent: AgentTemplate, id: string): Observable<Connection> {
-    return this.http.get<any>(`${agent.url}/connections/${id}`).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agent.url}/connections/${id}`, { headers: header }).pipe(map(dto => {
       return {
         id: dto.connection_id,
         accept: dto.accept,
@@ -115,7 +116,8 @@ export class ConnectionService {
   accept(agent: AgentTemplate, id: string, myEndpoint: string = ''): Observable<Connection> {
     let query = '';
     if (myEndpoint && myEndpoint !== '') query += '?my_endpoint=' + myEndpoint;
-    return this.http.post<any>(`${agent.url}/connections/${id}/accept-request${query}`, {}).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.post<any>(`${agent.url}/connections/${id}/accept-request${query}`, {}, { headers: header }).pipe(map(dto => {
       return {
         id: dto.connection_id,
         accept: dto.accept,
@@ -140,8 +142,9 @@ export class ConnectionService {
     }));
   }
 
-  delete(id: string): Observable<void> {
-    return this.http.delete<any>(`${this.hostUrl}/connections/${id}`);
+  delete(agent: AgentTemplate, id: string): Observable<void> {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.delete<any>(`${this.hostUrl}/connections/${id}`, { headers: header });
   }
 
 }

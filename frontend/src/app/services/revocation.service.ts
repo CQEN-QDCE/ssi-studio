@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { AgentTemplate } from '../models/agent-template';
 import { IssuerRevocationRegistry } from '../models/issuer-revocation-registry';
@@ -12,7 +12,8 @@ export class RevocationService {
   }
 
   getActiveRegistry(agent: AgentTemplate, credentialDefinitionId: string): Observable<IssuerRevocationRegistry> {
-    return this.http.get<any>(`${agent.url}/revocation/active-registry/${credentialDefinitionId}`).pipe(map(dto => {
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    return this.http.get<any>(`${agent.url}/revocation/active-registry/${credentialDefinitionId}`, { headers: header }).pipe(map(dto => {
       return IssuerRevocationRegistry.fromDto(dto);
     }));
   }
@@ -26,7 +27,8 @@ export class RevocationService {
     if (revokeRequest.notifyVersion) payload['notify_version'] = revokeRequest.notifyVersion;
     if (revokeRequest.revocationRegistryIdentifier) payload['rev_reg_id'] = revokeRequest.revocationRegistryIdentifier;
     if (revokeRequest.threadId) payload['thread_id'] = revokeRequest.threadId;
-    this.http.post<any>(`${agent.url}/revocation/revoke`, payload).subscribe(
+    const header = agent.apiKey ? new HttpHeaders({'x-api-key': agent.apiKey}) : new HttpHeaders();
+    this.http.post<any>(`${agent.url}/revocation/revoke`, payload, { headers: header }).subscribe(
       {
         next: () => {
           subject.next();

@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { VerificationTemplate } from '../models/verification-template';
+import { Routes } from '../routes';
 
 @Injectable()
 export class VerificationTemplateService {
@@ -12,8 +13,8 @@ export class VerificationTemplateService {
   constructor(private http: HttpClient) {
   }
 
-  getAllByOrganization(organizationId: string): Observable<VerificationTemplate[]> {
-    return this.http.get<any[]>(this.apiUrl + '/organizations/' + organizationId + '/verifications').pipe(map((dtos:any[]) => {
+  getAllByLaboratory(laboratoryId: string): Observable<VerificationTemplate[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${Routes.LABORATORY}/${laboratoryId}/${Routes.VERIFICATION}`).pipe(map((dtos:any[]) => {
         const templates: VerificationTemplate[] = [];
         for (const dto of dtos) {
           templates.push(VerificationTemplate.fromDto(dto));
@@ -23,14 +24,14 @@ export class VerificationTemplateService {
   }
 
   get(id: string): Observable<VerificationTemplate> {
-    return this.http.get<any>(this.apiUrl + '/verifications/' + id).pipe(map((dto: any) => {
+    return this.http.get<any>(`${this.apiUrl}/${Routes.VERIFICATION}/${id}`).pipe(map((dto: any) => {
       return VerificationTemplate.fromDto(dto);
     }));
   }
 
   create(template: VerificationTemplate): Observable<VerificationTemplate> {
     let subject = new Subject<VerificationTemplate>();
-    this.http.post<any>(`${this.apiUrl}/verifications`, template).subscribe(
+    this.http.post<any>(`${this.apiUrl}/${Routes.VERIFICATION}`, template).subscribe(
       { 
         next: (dto) => {
             subject.next(VerificationTemplate.fromDto(dto));
@@ -45,7 +46,7 @@ export class VerificationTemplateService {
 
   update(template: VerificationTemplate): Observable<VerificationTemplate> {
     let subject = new Subject<VerificationTemplate>();
-    this.http.put<any>(`${this.apiUrl}/verifications`, template).subscribe(
+    this.http.put<any>(`${this.apiUrl}/${Routes.VERIFICATION}`, template).subscribe(
       { 
         next: (dto) => {
             subject.next(VerificationTemplate.fromDto(dto));
@@ -60,7 +61,7 @@ export class VerificationTemplateService {
 
   delete(template: VerificationTemplate): Observable<void> {
     let subject = new Subject<void>();
-    this.http.delete(this.apiUrl + '/verifications/' + template.id).subscribe(
+    this.http.delete(`${this.apiUrl}/${Routes.VERIFICATION}/${template.id}`).subscribe(
       { 
         next: () => {
             subject.next();
