@@ -37,6 +37,11 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
    ```sh
    npm install
    ```
+3. Construire et démarrer les images Docker (PostgreSql, Keycloak, pgAdmin 4, interface Angular et API NestJs)
+   ```sh
+   docker-compose build
+   docker-compose up
+   ```
 
 ## Licence
 Distribué sous Licence Libre du Québec – Réciprocité (LiLiQ-R). Voir [LICENCE](LICENSE) pour plus d'informations.
