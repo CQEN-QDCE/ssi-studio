@@ -14,8 +14,6 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
 
 ### Prérequis
 
-* [PostgreSQL](https://www.postgresql.org)
-
 * npm
   ```sh
   npm install npm@latest -g
