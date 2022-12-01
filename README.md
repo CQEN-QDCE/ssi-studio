@@ -43,5 +43,10 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
    docker-compose up
    ```
 
+## Développement avec VSCode
+1. Assurez-vous d'avoir VSCode d'installé;
+2. Ouvrir l'espace de travail ssi-studio.workspace situé dans le répertoire .vscode;
+3. Démarrez les images Docker avec docker-compose up;
+4. Exécutez le débogage en sélectionnant "Launch Server & Client";
 ## Licence
 Distribué sous Licence Libre du Québec – Réciprocité (LiLiQ-R). Voir [LICENCE](LICENSE) pour plus d'informations.
