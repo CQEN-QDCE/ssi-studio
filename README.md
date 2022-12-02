@@ -52,14 +52,26 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
 ## Exécuter SSI Studio
 Le moyen le plus pratique d'exécuter SSI Studio est d'utiliser Docker. Avant de débuter, assurez-vous que [Docker Desktop](https://docker.com/products/docker-desktop/) est correctement installé sur votre machine.
 
-1. Commencez par construire les images Docker
+1. Clonez le dépôt
+   ```sh
+   git clone https://github.com/CQEN-QDCE/ssi-studio.git
+   ```
+2. Commencez par construire les images Docker
    ```sh
    docker-compose build
    ```
-2. Exécutez les images Docker
+3. Exécutez les images Docker
    ```sh
    docker-compose build
    ```
+
+Au moment où les images s'exécutent correctement, l'application est disponible ici [SSI Studio](https://localhost:4201). Pour vous authentifier, utilisez l'un des utilisateurs suivant:
+
+1. nom d'usager: user
+   mot de passe: user
+   
+2. nom d"usager: admin
+   mot de passe: admin
 
 ## Licence
 Distribué sous Licence Libre du Québec – Réciprocité (LiLiQ-R). Voir [LICENCE](LICENSE) pour plus d'informations.
