@@ -1,7 +1,7 @@
 [![img](https://img.shields.io/badge/Cycle%20de%20Vie-Phase%20d%C3%A9couverte-339999)](https://www.quebec.ca/gouv/politiques-orientations/vitrine-numeriqc/accompagnement-des-organismes-publics/demarche-conception-services-numeriques)
 [![License](https://img.shields.io/badge/Licence-LiLiQ--R-blue)](LICENSE)
 
-## SSI Studio
+## À propos de SSI Studio
 
 Outils et services qui facilitent l'émission, la vérification et la gestion d'attestations d'identité numérique basé sur [Hyperledger Aries](https://www.hyperledger.org/use/aries) et [Hyperledger Indy](https://www.hyperledger.org/use/hyperledger-indy).
 
@@ -48,5 +48,18 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
 2. Ouvrir l'espace de travail ssi-studio.workspace situé dans le répertoire .vscode;
 3. Démarrez les images Docker avec docker-compose up;
 4. Exécutez le débogage en sélectionnant "Launch Server & Client";
+
+## Exécuter SSI Studio
+Le moyen le plus pratique d'exécuter SSI Studio est d'utiliser Docker. Avant de débuter, assurez-vous que [Docker Desktop](https://docker.com/products/docker-desktop/) est correctement installé sur votre machine.
+
+1. Commencez par construire les images Docker
+   ```sh
+   docker-compose build
+   ```
+2. Exécutez les images Docker
+   ```sh
+   docker-compose build
+   ```
+
 ## Licence
 Distribué sous Licence Libre du Québec – Réciprocité (LiLiQ-R). Voir [LICENCE](LICENSE) pour plus d'informations.
