@@ -1,7 +1,7 @@
 [![img](https://img.shields.io/badge/Cycle%20de%20Vie-Phase%20d%C3%A9couverte-339999)](https://www.quebec.ca/gouv/politiques-orientations/vitrine-numeriqc/accompagnement-des-organismes-publics/demarche-conception-services-numeriques)
 [![License](https://img.shields.io/badge/Licence-LiLiQ--R-blue)](LICENSE)
 
-## SSI Studio
+## À propos de SSI Studio
 
 Outils et services qui facilitent l'émission, la vérification et la gestion d'attestations d'identité numérique basé sur [Hyperledger Aries](https://www.hyperledger.org/use/aries) et [Hyperledger Indy](https://www.hyperledger.org/use/hyperledger-indy).
 
@@ -13,8 +13,6 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
 ## Démarrage
 
 ### Prérequis
-
-* [PostgreSQL](https://www.postgresql.org)
 
 * npm
   ```sh
@@ -31,14 +29,42 @@ Outils et services qui facilitent l'émission, la vérification et la gestion d'
 
 ### Installation
 
-1. Cloner le dépôt
+## Développement avec VSCode
+1. Assurez-vous d'avoir VSCode d'installé;
+2. Ouvrir l'espace de travail ssi-studio.workspace situé dans le répertoire .vscode;
+3. Démarrez les images Docker avec docker-compose up;
+4. Exécutez le débogage en sélectionnant "Launch Server & Client";
+
+## Installation
+Le moyen le plus pratique d'exécuter SSI Studio est d'utiliser Docker. Avant de débuter, assurez-vous que [Docker Desktop](https://docker.com/products/docker-desktop/) est correctement installé sur votre machine.
+
+1. Clonez le dépôt
    ```sh
    git clone https://github.com/CQEN-QDCE/ssi-studio.git
    ```
-2. Installer les paquets NPM
+2. Commencez par construire les images Docker
    ```sh
-   npm install
+   docker-compose build
    ```
+3. Exécutez les images Docker
+   ```sh
+   docker-compose up
+   ```
+
+Au moment où tous les images s'exécutent, l'application est disponible ici [SSI Studio](https://localhost:4201). Pour vous authentifier, utilisez l'un des utilisateurs suivant:
+
+1. nom d'usager: user
+   mot de passe: user
+   
+2. nom d"usager: admin
+   mot de passe: admin
+   
+Les images Docker qui s'exécutent sont:
+1. Une base de données PostgreSql accessible ici https://localhost:5433;
+2. L'API REST NestJs de l'application accessible ici https://localhost:3001;
+3. Interface Angular accessible ici https://localhost:4201;
+4. Fournisseur d'identité Keycloak accessible ici https://localhost:8080;
+5. Outil de gestion pgAmin 4 accessible ici https://localhost:16543;
 
 ## Licence
 Distribué sous Licence Libre du Québec – Réciprocité (LiLiQ-R). Voir [LICENCE](LICENSE) pour plus d'informations.

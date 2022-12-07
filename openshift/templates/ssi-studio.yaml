@@ -484,10 +484,7 @@ objects:
           - name: DB_ADDR
             value: ${POSTGRESQL_NAME}
           - name: DB_DATABASE
-            valueFrom:
-              secretKeyRef:
-                name: ${POSTGRESQL_NAME}
-                key: database-name
+            value: ${KEYCLOAK_DATABASE_NAME}
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -684,3 +681,8 @@ parameters:
   description: Keycloak client identifier.
   required: true
   value: "angular-app"
+- name: KEYCLOAK_DATABASE_NAME
+  displayName: Keycloak database name
+  description: Name of the Keycloak database.
+  required: true
+  value: "keycloak"
