@@ -31,6 +31,7 @@ export class AgentController {
       entity.createdBy = request.user.sub;
       entity.lastChangedBy = request.user.sub;
       entity.name = dto.name;
+      entity.slug = dto.slug;
       entity.laboratoryId = dto.laboratoryId;
       entity.url = dto.url;
       entity.apiKey = dto.apiKey;
@@ -44,6 +45,7 @@ export class AgentController {
       entity.id = dto.id;
       entity.lastChangedBy = request.user.sub;
       entity.name = dto.name;
+      entity.slug = dto.slug;
       entity.laboratoryId = dto.laboratoryId;
       entity.url = dto.url;
       entity.apiKey = dto.apiKey;

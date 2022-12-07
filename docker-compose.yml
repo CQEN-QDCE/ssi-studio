@@ -63,7 +63,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     environment: 
-      PGADMIN_DEFAULT_EMAIL: "admin"
+      PGADMIN_DEFAULT_EMAIL: "admin@dev.com"
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports: 
       - "16543:80"

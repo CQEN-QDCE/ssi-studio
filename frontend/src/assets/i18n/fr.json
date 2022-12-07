@@ -1,5 +1,7 @@
 {
     "NameLabel": "Nom",
+    "TopicLabel": "Sujet",
+    "CreationDateLabel": "Date Création",
     "DescriptionLabel": "Description",
     "VersionLabel": "Version",
     "RevocableLabel": "Révocable",
@@ -9,6 +11,7 @@
     "VerificationTemplateTitle": "Gabarit vérification",
     "CredentialTemplateTitle": "Gabarit attestation",
     "AgentTemplateTitle": "Gabarit Agent",
+    "AgentEventDetailsTitle": "Détails Événement Agent",
     "WorkspaceTitle": "Laboratoire",
     "WorkspacesTitle": "Laboratoires",
     "CreateAgentTemplateLabel": "Créer Agent",
@@ -39,6 +42,7 @@
     "NoLabel": "Non",
     "UrlLabel": "Url",
     "ApiKeyLabel": "Clé API",
+    "SlugLabel": "Slug",
     "ConfigLabel": "Config",
     "RequestedCredentialNameLabel": "Nom attestation demandée",
     "AttributeLabel": "Attribut",
@@ -65,5 +69,9 @@
     "InternalServerError": "Erreur de serveur interne.",
     "ErrorTitle": "Erreur",
     "OkLabel": "OK",
-    "CloseLabel": "Fermer"
+    "CloseLabel": "Fermer",
+    "EventsLabel": "Événements",
+    "IssueCredentialLabel": "Attestion émises",
+    "DetailsLabel": "Détails",
+    "ChatLabel": "Chat"
 }

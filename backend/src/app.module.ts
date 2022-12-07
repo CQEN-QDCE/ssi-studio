@@ -25,8 +25,6 @@ import { AgentService } from './agent/agent.service';
 import { UserController } from './user/user.controller';
 import { User } from './model/user.entity';
 import { UserService } from './user/user.service';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { IssueCredential } from './model/issue-credential.entity';
 import { IssueCredentialController } from './issue-credential/issue-credential.controller';
 import { IssueCredentialService } from './issue-credential/issue-credential.service';
@@ -42,6 +40,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { WebHookController } from './webhook/webhook.controller';
 import { WebHookService } from './webhook/webhook.service';
 import { SseService } from './webhook/sse.service';
+import { AgentEventService } from './agent/agent-event.service';
+import { AgentEventController } from './agent/agent-event.controller';
+import { AgentEvent } from './model/agent-event.entity';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { SseService } from './webhook/sse.service';
     TypeOrmModule.forFeature([Credential]),
     TypeOrmModule.forFeature([Verification]),
     TypeOrmModule.forFeature([Agent]),
+    TypeOrmModule.forFeature([AgentEvent]),
     TypeOrmModule.forFeature([User]),
     TypeOrmModule.forFeature([IssueCredential])
   ],
@@ -71,6 +73,7 @@ import { SseService } from './webhook/sse.service';
     VerificationController, 
     ConnectionController, 
     AgentController,
+    AgentEventController,
     UserController,
     WebHookController,
     IssueCredentialController],
@@ -85,6 +88,7 @@ import { SseService } from './webhook/sse.service';
     VerificationService, 
     ConnectionService, 
     AgentService,
+    AgentEventService,
     UserService,
     IssueCredentialService,
     // This adds a global level authentication guard,
