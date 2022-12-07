@@ -1,12 +1,15 @@
 <h1><span class="resource-icon">Agent</span> {{agentTemplate.name}}</h1>
 <p-tabView>
-    <p-tabPanel header="Details">
+    <p-tabPanel header="{{'DetailsLabel' | translate }}">
        <agent-config [agentConfig]="agentConfig"></agent-config>
     </p-tabPanel>
-    <p-tabPanel header="Issue Credentials">
+    <p-tabPanel header="{{'IssueCredentialLabel' | translate }}">
         <issue-credential [agentTemplate]="agentTemplate"></issue-credential>
     </p-tabPanel>
-    <p-tabPanel header="Chat">
+    <p-tabPanel header="{{'ChatLabel' | translate }}">
         <chat></chat>
+    </p-tabPanel>
+    <p-tabPanel header="{{'EventsLabel' | translate }}">
+        <agent-event></agent-event>
     </p-tabPanel>
 </p-tabView>

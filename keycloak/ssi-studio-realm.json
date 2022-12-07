@@ -2237,15 +2237,15 @@
     },
     "users": [
       {
-        "username": "user1",
+        "username": "user",
         "enabled": true,
-        "email": "user1@dev.com",
+        "email": "user@dev.com",
         "firstName": "User",
-        "lastName": "One",
+        "lastName": "Dev",
         "credentials": [
           {
             "type": "password",
-            "value": "password"
+            "value": "user"
           }
         ],
         "realmRoles": [
@@ -2253,35 +2253,19 @@
         ]
       },
       {
-        "username": "user2",
+        "username": "admin",
         "enabled": true,
-        "email": "user2@dev.com",
-        "firstName": "User",
-        "lastName": "Two",
+        "email": "admin@dev.com",
+        "firstName": "Admin",
+        "lastName": "Dev",
         "credentials": [
           {
             "type": "password",
-            "value": "password"
+            "value": "admin"
           }
         ],
         "realmRoles": [
           "app-admin"
-        ]
-      },
-      {
-        "username": "user3",
-        "enabled": true,
-        "email": "user3@dev.com",
-        "firstName": "User",
-        "lastName": "Three",
-        "credentials": [
-          {
-            "type": "password",
-            "value": "password"
-          }
-        ],
-        "realmRoles": [
-          "app-user", "app-admin"
         ]
       }
     ]

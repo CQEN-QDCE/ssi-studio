@@ -15,6 +15,10 @@ export class AgentService {
       return await this.repository.findOne({where: {id: id, createdBy: createdBy}});
     }
 
+    public async getBySlug(slug: string) {
+      return await this.repository.findOne({ where: { slug: slug } });
+    }
+
     public async create(agent: Agent): Promise<Agent> {
       return await this.repository.save(await this.repository.create(agent));
     }

@@ -89,6 +89,8 @@ import { CredentialTemplateDetailsComponent } from './credential-template/creden
 import { SseService } from './services/sse.service';
 import { MyService } from './services/my.service';
 import { ChatComponent } from './agent-template/chat.component';
+import { AgentEventService } from './services/agent-event.service';
+import { AgentEventComponent } from './agent-event/agent-event.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +102,7 @@ import { ChatComponent } from './agent-template/chat.component';
     AgentComponent,
     IssueCredentialComponent,
     AgentConfigComponent,
+    AgentEventComponent,
     SchemaEditorComponent,
     OcaEditorComponent,
     LaboratoryListComponent,
@@ -176,6 +179,7 @@ import { ChatComponent } from './agent-template/chat.component';
     CredentialTemplateService,
     VerificationTemplateService,
     AgentTemplateService,
+    AgentEventService,
     LaboratoryService,
     SchemaService,
     ServerService,

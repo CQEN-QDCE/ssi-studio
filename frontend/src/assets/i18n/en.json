@@ -1,5 +1,7 @@
 {
     "NameLabel": "Name",
+    "TopicLabel": "Topic",
+    "CreationDateLabel": "Creation Date",
     "DescriptionLabel": "Description",
     "VersionLabel": "Version",
     "RevocableLabel": "Revocable",
@@ -9,6 +11,7 @@
     "VerificationTemplateTitle": "Verification Template",
     "CredentialTemplateTitle": "Credential Template",
     "AgentTemplateTitle": "Agent Template",
+    "AgentEventDetailsTitle": "Agent Event Details",
     "WorkspaceTitle": "Laboratory",
     "WorkspacesTitle": "Laboratories",
     "CreateAgentTemplateLabel": "Create Agent",
@@ -39,6 +42,7 @@
     "NoLabel": "No",
     "UrlLabel": "Url",
     "ApiKeyLabel": "API Key",
+    "SlugLabel": "Slug",
     "ConfigLabel": "Config",
     "RequestedCredentialNameLabel": "Requested Credential Name",
     "AttributeLabel": "Attribute",
@@ -65,5 +69,9 @@
     "InternalServerError": "Internal server error.",
     "ErrorTitle": "Error",
     "OkLabel": "OK",
-    "CloseLabel": "Close"
+    "CloseLabel": "Close",
+    "EventsLabel": "Events",
+    "IssueCredentialLabel": "Issue Credentials",
+    "DetailsLabel": "Details",
+    "ChatLabel": "Chat"
 }
