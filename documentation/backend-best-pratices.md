@@ -1,4 +1,23 @@
 
+# Facilité l'installation de l'application pour le développement
+1. Assurez-vous d'avoir un fichier README clair qui explique le projet et comment le configurer.
+
+2. Assurez-vous que toutes les dépendances requises sont spécifiées afin que les développeurs puissent les installer rapidement.
+
+3. Fournissez un script ou un ensemble d'instructions pour configurer le projet avec un minimum d'effort.
+
+4. Fournir un moyen de démarrer rapidement l'application pour le développement, par exemple un script en un clic.
+
+5. Fournir des paramètres de configuration par défaut pour que l'application fonctionne rapidement.
+
+6. S'assurer que le processus de construction est automatisé et facile à exécuter.
+
+7. Inclure un style de codage cohérent et facile à suivre.
+
+8. Mettez en place un système d'intégration continue (IC) pour exécuter automatiquement les tests et construire l'application.
+
+9. Fournir un moyen de déboguer facilement l'application pendant le développement.
+
 # Déploiement
 Différentes stratégies peuvent être utilisées pour déployer une application:
 
