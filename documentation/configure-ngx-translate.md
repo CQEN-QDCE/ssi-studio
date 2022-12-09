@@ -61,4 +61,6 @@ export function appInitializerFactory(translate : TranslateService) {
 Maintenant l'application attendra l'initialisation des traductions avant de s'afficher pour l'utilisateur.
 
 C'est tout, vous pouvez maintenant utiliser .instant sans problème.
-```
+
+Référence:
+https://mcvendrell.medium.com/configuring-ngx-translate-to-load-at-startup-in-angular-1995e7dd6fcc
