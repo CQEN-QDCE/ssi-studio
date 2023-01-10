@@ -57,7 +57,7 @@ Le moyen le plus pratique d'exécuter SSI Studio est d'utiliser Docker. Avant de
    docker-compose up
    ```
 
-Au moment où tous les images s'exécutent, l'application est disponible ici [SSI Studio](https://localhost:4201). Pour vous authentifier, utilisez l'un des utilisateurs suivant:
+Au moment où tous les images s'exécutent, l'application est disponible ici [SSI Studio](http://localhost:4201). Pour vous authentifier, utilisez l'un des utilisateurs suivant:
 
 1. nom d'usager: user
    mot de passe: user
@@ -66,11 +66,11 @@ Au moment où tous les images s'exécutent, l'application est disponible ici [SS
    mot de passe: admin
    
 Les images Docker qui s'exécutent sont:
-1. Une base de données PostgreSql accessible ici https://localhost:5433;
-2. L'API REST NestJs de l'application accessible ici https://localhost:3001;
-3. Interface Angular accessible ici https://localhost:4201;
-4. Fournisseur d'identité Keycloak accessible ici https://localhost:8080;
-5. Outil de gestion pgAmin 4 accessible ici https://localhost:16543;
+1. Une base de données PostgreSql accessible ici http://localhost:5433;
+2. L'API REST NestJs de l'application accessible ici http://localhost:3001;
+3. Interface Angular accessible ici http://localhost:4201;
+4. Fournisseur d'identité Keycloak accessible ici http://localhost:8080;
+5. Outil de gestion pgAmin 4 accessible ici http://localhost:16543;
 
 ## Licence
 Distribué sous Licence Libre du Québec – Réciprocité (LiLiQ-R). Voir [LICENCE](LICENSE) pour plus d'informations.
