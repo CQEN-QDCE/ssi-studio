@@ -28,6 +28,7 @@ export class IssueCredentialController {
       issueCredential.name = dto.name;
       issueCredential.credentialPreview = dto.credentialPreview;
       issueCredential.credentialExchangeId = dto.credentialExchangeId;
+      issueCredential.revocable = dto.revocable;
       issueCredential.revoked = dto.revoked;
       issueCredential.agentTemplateId = dto.agentTemplateId;
       return await this.service.create(issueCredential);
@@ -41,6 +42,7 @@ export class IssueCredentialController {
       issueCredential.name = dto.name;
       issueCredential.credentialPreview = dto.credentialPreview;
       issueCredential.credentialExchangeId = dto.credentialExchangeId;
+      issueCredential.revocable = dto.revocable;
       issueCredential.revoked = dto.revoked;
       issueCredential.agentTemplateId = dto.agentTemplateId;
       return await this.service.update(issueCredential);

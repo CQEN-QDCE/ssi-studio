@@ -24,7 +24,7 @@ export class IssueCredential {
         issueCredential.id = dto.id;
         issueCredential.name = dto.name;
         issueCredential.credentialPreview = dto.credentialPreview;
-        issueCredential.revocable = dto.revoked;
+        issueCredential.revocable = dto.revocable;
         issueCredential.revoked = dto.revoked;
         issueCredential.credentialExchangeId = dto.credentialExchangeId;
         issueCredential.agentTemplateId = dto.agentTemplateId;
