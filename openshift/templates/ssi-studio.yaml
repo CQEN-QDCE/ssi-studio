@@ -272,7 +272,9 @@ objects:
         protocol: TCP
         port: 3000
         targetPort: 3000
-#angular-frontend (Angular)
+######################################################################
+# Angular Frontend
+######################################################################
 - kind: ConfigMap
   apiVersion: v1
   metadata:
@@ -476,7 +478,7 @@ objects:
         - args:
           - start-dev
           name: ${KEYCLOAK_NAME}
-          image: quay.io/keycloak/keycloak:18.0.2
+          image: quay.io/keycloak/keycloak:20.0
           ports:
             - containerPort: 8080
             - containerPort: 8443

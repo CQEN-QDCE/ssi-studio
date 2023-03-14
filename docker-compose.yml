@@ -70,7 +70,7 @@ services:
     depends_on: 
       - database    
   keycloak:
-    image: quay.io/keycloak/keycloak:18.0.2
+    image: quay.io/keycloak/keycloak:20.0
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: database
