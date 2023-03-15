@@ -478,7 +478,7 @@ objects:
         - args:
           - start-dev
           name: ${KEYCLOAK_NAME}
-          image: quay.io/keycloak/keycloak:20.0
+          image: quay.io/keycloak/keycloak:21.0
           ports:
             - containerPort: 8080
             - containerPort: 8443
@@ -519,7 +519,7 @@ objects:
             value: 'edge'
           resources:
             limits:
-              memory: 512Mi
+              memory: 1024Mi
           imagePullPolicy: IfNotPresent
           capabilities: {}
           securityContext:
