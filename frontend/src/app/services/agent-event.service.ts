@@ -14,7 +14,7 @@ export class AgentEventService {
   constructor(private http: HttpClient) {
   }
 
-  getByAgentSlug(agentSlug: string, skip: number = 0, take: number = 1000000): Observable<AgentEventResult> {
+  getByAgentSlug(agentSlug: string, skip: number | null = 0, take: number | null = 1000000): Observable<AgentEventResult> {
     return this.http.get<any[]>(`${this.apiUrl}/${Routes.AGENT_EVENT}?slug=${agentSlug}&skip=${skip}&take=${take}`).pipe(map((dto:any) => {
         const agentEventResult = new AgentEventResult();
         agentEventResult.total = dto.total;

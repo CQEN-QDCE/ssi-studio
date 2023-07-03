@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, Event, NavigationEnd } from '@angular/router';
-import { lastValueFrom, Subject, takeUntil } from 'rxjs';
-import { ConfirmationService, MenuItem } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { ConfirmationService, MenuItem, MenuItemCommandEvent } from 'primeng/api';
 import { AgentTemplate } from '../models/agent-template';
 import { AgentTemplateService } from '../services/agent-template.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -68,14 +68,14 @@ export class AgentTemplateListComponent implements OnInit, OnDestroy {
     this.items = [{
       label: 'Update',
       icon: 'pi pi-pencil',
-      command: (rowIndex: number) => {
+      command: (event: MenuItemCommandEvent) => {
         this.editTemplate(this.currentRowIndex);
       }
   },
   {
       label: 'Delete',
       icon: 'fa fa-trash',
-      command: (rowIndex: number) => {
+      command: (event: MenuItemCommandEvent) => {
         this.deleteTemplate(this.currentRowIndex);
       }
   }

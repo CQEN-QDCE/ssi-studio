@@ -3,8 +3,8 @@
     "version": "0.1.0",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "install:backend": "cd backend && npm ci",
-      "install:frontend": "cd frontend && npm ci",
+      "install:backend": "cd backend && npm install",
+      "install:frontend": "cd frontend && npm install",
       "install:all": "run-s install:backend install:frontend",
       "build:backend": "cd backend && nest build",
       "build:frontend": "cd frontend && ng build",

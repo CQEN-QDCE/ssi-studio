@@ -4,6 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AgentEvent } from '../models/agent-event';
 import { AgentEventService } from '../services/agent-event.service';
 import { prettyPrintJson } from 'pretty-print-json';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 @Component({
   selector: 'agent-event',
@@ -40,7 +41,7 @@ export class AgentEventComponent implements OnInit, OnDestroy {
     this.agentEventDetailsDialogVisible = false;
   }
 
-  loadAgentEvents(event: LazyLoadEvent) {  
+  loadAgentEvents(event: TableLazyLoadEvent) {  
     this.loading = true;
 
     this.agentEventService.getByAgentSlug('bls2', event.first, event.rows).pipe(takeUntil(this.ngUnsubscribe)).subscribe(agentEventResult => {
